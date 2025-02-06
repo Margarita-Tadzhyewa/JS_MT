@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood</title>
+</head>
+<body>
+
+    <!-- Доработать проект MOOD (слайды N.10) так, чтобы цветов в консоли было ровно столько сколько запрошено,
+     но цвета не повторялись. Для контроля повторения цветов использовать объект. -->
+
+    <script>
+
+        function randomDiap(n,m) {
+                return Math.floor(Math.random()*(m-n+1))+n;
+        }
+    
+        function mood(colorsCount) {
+            const colors=[ '', 'красный', 'оранжевый', 'жёлтый', 'зелёный', 'голубой', 'синий', 'фиолетовый' ];
+            
+            const unique = {};
+
+            console.log('цветов: ' + colorsCount);
+
+            for (let i = 0; i < colorsCount; i++) {
+                let n;
+                
+                do {
+                    n = randomDiap(1, 7);
+                } while (unique[n]);
+
+                unique[n] = true;
+                const colorName = colors[n];
+                console.log(colorName);
+            }
+        }
+
+        mood(3);
+    </script>
+
+
+<!-- <script>
+    function randomDiap(n,m) {
+                return Math.floor(Math.random()*(m-n+1))+n;
+        }
+
+    const colors=[ '', 'красный', 'оранжевый', 'жёлтый', 'зелёный', 'голубой', 'синий', 'фиолетовый' ];
+
+    const uniqueFruit = (list)=>{
+        const unique = {};
+        console.log('цветов: ' + list.length);
+
+        list.forEach(item => {
+            unique[item] = true;
+        })
+    return Object.keys(unique);
+    }
+
+</script> -->
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anketa</title>
+</head>
+<body>
+
+
+<!-- <script>
+
+    var name = prompt('Введите ваше имя', 'Маргарита');
+    while (name == ''){
+        alert('Вы некоректно ввели свои данные');
+        name = prompt('Введите ваше имя', 'Маргарита');
+    }
+
+    var last_name = prompt('Введите вашу фамилию', 'Таджиева');
+    while (last_name == ''){
+        alert('Вы некоректно ввели свои данные');
+        last_name = prompt('Введите вашу фамилию', 'Таджиева');
+    }
+
+    var second_name = prompt('Введите ваше отчество', 'Борисовна');
+    while (second_name == ''){
+        alert('Вы некоректно ввели свои данные');
+        second_name = prompt('Введите ваше отчество', 'Борисовна');
+    }
+
+    var age = parseInt(prompt('Введите ваш возраст'));
+    var sex = confirm('Если ваш пол мужской - нажмите OK, если женский - Cancel');
+
+    var fullage = age * 365;
+    var futureage = age + 5;
+
+    var benefit;
+    if (age>=65){
+        benefit = 'да';
+    }
+    else{
+        benefit = 'нет'; 
+    }
+
+    var gender;
+        if (sex == true){
+            gender = 'мужcкой';
+        }
+        else{
+            gender = 'женский';
+        }
+
+
+
+    let message = `
+        Ваше ФИО: ${last_name} ${name} ${second_name}
+        Ваш возраст в годах: ${age}
+        Ваш возраст в днях: ${fullage}
+        Через 5 лет вам будет: ${futureage}
+        Ваш пол: ${gender}
+        Вы на пенсии: ${benefit}`;
+
+    alert(message);
+
+</script> -->
+
+<script>
+
+    let name, fam, otch;
+    do{
+        name=prompt('Введите имя');
+    }while(!name);
+    do{
+        fam=prompt('Введите фамилию');
+    }while(!fam);
+    do{
+        otch=prompt('Введите отчество');
+    }while(!otch);
+
+    let age;
+    do{
+        age=parseInt(prompt());
+    }while(!age);
+
+    const gender=confirm('Ваш пол мужской?');
+
+    const pensAge=gender?60:55;
+    const pensStr=(age>pensAge)?'да':'нет';
+
+    let message=`
+    Ваше ФИО: ${fam} ${name} ${otch}
+    Ваш возраст в годах: ${age}
+    Ваш возраст в днях: ${age*365}
+    Через 5 лет вам будет: ${age+5}
+    Ваш пол: ${gender?'мужской':'женский'}
+    Вы на пенсии: ${pensStr}`;
+        
+    alert(message);
+
+
+</script>
+</body>
+</html>

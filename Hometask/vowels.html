@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vowels</title>
+</head>
+<body>
+    
+    <script>
+        const vowels = 'аеёиоуыэюя';
+        let str=prompt('Enter something');
+
+        function countLetter(str) {
+            let count=0;
+            for (let i=0; i<str.length; i++){
+                if(vowels.includes(str[i].toLowerCase())){
+                    count++;
+                }
+            }
+            return count; //alert(count)
+        }
+
+        alert ('Количество гласных в строке: '+countLetter(str)); //countLetter(str)
+    </script>
+
+
+
+    <!-- Задача 1. Определить сколько раз каждый элемент встречается в массиве. -->
+     <!-- <script>
+
+        const fruits = ['kiwi', 'apple', 'kiwi', 'orange', 'kiwi', 'apple'];
+
+        const countItem = (list) => {
+            const count = {};
+
+            list.forEach(f => {
+                if(!count[f]){
+                    count[f]=1;
+                }
+                else{
+                    count[f]++;
+                }
+            });
+
+            return count;
+
+        };
+
+        const countResult = countItems(fruits);
+        console.log(countResult);
+
+     </script> -->
+    
+    <!-- Задача 2. Создать массив который содержит только уникальные значения исходного массива. -->
+    <!-- <script>
+
+        const fruits = ['kiwi', 'apple', 'kiwi', 'orange', 'kiwi', 'apple'];
+
+        const uniqueItems = (list) => {
+            const unique = {};
+            list.forEach(item => {
+                 unique[item] = true;
+            });
+        return Object.keys(unique);
+        }
+
+        const fruitsUnique =  uniqueItems(fruits);
+        console.log(fruitsUnique);
+
+     </script> -->
+
+
+    <!-- Задача 3. Создать функцию, которая группирует студентов по возрасту. -->
+     <!-- <script>
+
+        const students = [
+            { name: 'alex', age: 20 },
+            { name: 'mike', age: 24 },
+            { name: 'masha', age: 20 },
+            { name: 'stas', age: 18 },
+        ];
+
+        const grouped={};
+
+        students.forEach(s=>{
+            if(!grouped[s.age]){
+                grouped[s.age]=[s];
+            }
+            else{
+                grouped[s.age].push(s);
+            }
+        })
+
+     </script> -->
+
+</body>
+</html>
