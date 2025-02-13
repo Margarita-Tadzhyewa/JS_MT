@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vowels</title>
 </head>
+
 <body>
-    
+
     <script>
         const vowels = 'аеёиоуыэюя';
-        let str=prompt('Enter something');
+        let str = prompt('Enter something');
 
         function countLetter(str) {
-            let count=0;
-            for (let i=0; i<str.length; i++){
-                if(vowels.includes(str[i].toLowerCase())){
+            let count = 0;
+            for (let i = 0; i < str.length; i++) {
+                if (vowels.includes(str[i].toLowerCase())) {
                     count++;
                 }
             }
             return count; //alert(count)
         }
 
-        alert ('Количество гласных в строке: '+countLetter(str)); //countLetter(str)
+        alert('Количество гласных в строке: ' + countLetter(str)); //countLetter(str)
     </script>
 
 
 
     <!-- Задача 1. Определить сколько раз каждый элемент встречается в массиве. -->
-     <!-- <script>
+    <!-- <script>
 
         const fruits = ['kiwi', 'apple', 'kiwi', 'orange', 'kiwi', 'apple'];
 
@@ -51,7 +53,7 @@
         console.log(countResult);
 
      </script> -->
-    
+
     <!-- Задача 2. Создать массив который содержит только уникальные значения исходного массива. -->
     <!-- <script>
 
@@ -72,7 +74,7 @@
 
 
     <!-- Задача 3. Создать функцию, которая группирует студентов по возрасту. -->
-     <!-- <script>
+    <!-- <script>
 
         const students = [
             { name: 'alex', age: 20 },
@@ -94,5 +96,105 @@
 
      </script> -->
 
+    <!-- Реализуйте функцию unique_in_order, которая принимает в качестве аргумента последовательность и 
+      возвращает список элементов, в котором нет ни одного элемента с одинаковым значением, расположенного 
+      рядом друг с другом и сохраняющего исходный порядок элементов. -->
+
+    <script>
+
+        var uniqueInOrder = function (iterable) {
+            //your code here - remember iterable can be a string or an array
+            iterable = Array.isArray(iterable) ? iterable : iterable.split('');
+            const arr = [];
+
+            const result = [];
+
+            for (let i = 0; i < iterable.length; i++) {
+                if (iterable[i] !== iterable[i - 1]) {
+                    result.push(iterable[i]);
+                }
+            }
+
+            return result;
+        }
+
+    </script>
+
+    <!-- Вам будет дана непустая строка. Ваша задача - вернуть средний символ (символы) строки.
+            Если длина строки нечетная, верните средний символ.
+            Если длина строки четная, верните 2 средних символа. -->
+
+    <script>
+        function getMiddle(s) {
+            //Code goes here!
+
+            const middleIndex = Math.floor(s.length / 2);
+
+            if (s.length % 2 === 0) { // Если длина строки четная
+                return s.slice(middleIndex - 1, middleIndex + 1);
+            } else { // Если длина строки нечетная
+                return s[middleIndex];
+            }
+        }
+    </script>
+
+    <!-- Complete the solution so that it reverses the string passed into it.
+        'world'  =>  'dlrow'
+        'word'   =>  'drow' -->
+
+    <script>
+        function solution(str) {
+            s = '';
+            for (let i = str.length - 1; i >= 0; i--) {
+                s += str[i];
+            }
+            return s;
+        }
+    </script>
+
+    <!-- Напишите функцию, которая принимает в качестве параметров целое неотрицательное число n 
+        и строку s, а возвращает строку s, повторенную ровно n раз. 
+        6, "I"     -> "IIIIII"
+        5, "Hello" -> "HelloHelloHelloHelloHello"-->
+    <script>
+        function repeatStr(n, s) {
+            return s.repeat(n);
+        }
+    </script>
+
+    <!-- Write a function that removes the spaces from the string, then return the resultant string.
+        Examples (Input -> Output):
+
+        "8 j 8   mBliB8g  imjB8B8  jl  B" -> "8j8mBliB8gimjB8B8jlB"
+        "8 8 Bi fk8h B 8 BB8B B B  B888 c hl8 BhB fd" -> "88Bifk8hB8BB8BBBB888chl8BhBfd"
+        "8aaaaa dddd r     " -> "8aaaaaddddr" -->
+    <script>
+        function noSpace(x) {
+            return x.split(' ').join('');
+
+        }
+    </script>
+
+    <script>
+        function invert(array) {
+  var newArr = [];
+  for(var i = 0; i < array.length; i++){
+    newArr.push(-array[i]);
+  }
+   return newArr;
+}
+    </script>
+    <script>
+        const invert = array => array.map(num => -num);
+    </script>
+
+    <!-- Реализуйте функцию, которая преобразует заданное булево значение в его строковое представление. -->
+     <script>
+        function booleanToString(b){
+        return (''+b);
+            }
+     </script>
+
 </body>
+
 </html>
