@@ -30,12 +30,11 @@
     <script>
             const vowels = 'аеёиоуыэюя';
             let str = prompt('Enter something');
-            let strArray = str.split('');
 
             const countLetter = (list) => {
                 let count = 0;
 
-                list.forEach(f => {
+                list.split('').forEach(f => {
                     if (vowels.includes(f.toLowerCase())) {
                         count++;
                     }
@@ -45,12 +44,12 @@
             };
 
             const countLetterfilter = (list) => {
-                return list.filter(f =>
+                return list.split('').filter(f =>
                     vowels.includes(f.toLowerCase())).length;
             };
 
             const countLetterreduce = (list) => {
-                return list.reduce((k, f) => {
+                return list.split('').reduce((k, f) => {
                     if (vowels.includes(f.toLowerCase())) {
                         k++;
                     }
@@ -58,13 +57,13 @@
                 }, 0);
             };
 
-            const countResult = countLetter(strArray);
+            const countResult = countLetter(str);
             console.log(countResult);
 
-            const countVowels = countLetterfilter(strArray);
+            const countVowels = countLetterfilter(str);
             console.log(countVowels);
 
-            const count = countLetterreduce(strArray);
+            const count = countLetterreduce(str);
             console.log(count);
 
     </script> 
