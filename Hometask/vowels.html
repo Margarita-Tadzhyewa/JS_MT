@@ -210,6 +210,104 @@
         return parseInt(String(n).split('').sort().reverse().join(''));
         }
     </script>
+
+    <!-- Проверьте, содержит ли строка одинаковое количество «x» и «o». Метод должен возвращать булево значение 
+     и не учитывать регистр. Строка может содержать любой символ. -->
+     <script>
+            function XO(str) {
+                let count_o = 0;
+                let count_x = 0;
+                for (let i = 0; i <= str.length; i++) {
+                    if (str.includes('o')) {
+                        count_o++;
+                    };
+
+                    if (str.includes('x')) {
+                        count_x++;
+                    }
+                };
+                return count_o === count_x ? true : false;
+            }
+     </script>
+     <script>
+        const XO = str => {
+            str = str.toLowerCase().split('');
+            return str.filter(x => x === 'x').length === str.filter(x => x === 'o').length;
+}
+     </script>
+
+     <!-- Задав список целых чисел, определите, является ли сумма его элементов четной или нечетной. -->
+      <script>
+        function oddOrEven(array) {
+            return array.reduce((a,b) => a + b, 0 )%2 ? 'odd':'even';
+            }
+      </script>
+
+      <!-- Напишите функцию, которая принимает строку из одного или нескольких слов и 
+       возвращает ту же строку, но с перевернутыми словами, состоящими из пяти или более букв -->
+       <script>
+        function spinWords(string){
+            let result = [];
+            string.split(' ').forEach(word =>{
+                word.length >= 5 ? result.push(word.split('').reverse().join('')): result.push(word);
+                
+
+            });
+            return result.join(' ');
+            }
+       </script>
+
+
+
+
+<!-- Создайте функцию, которая возвращает сумму двух наименьших положительных чисел, заданную 
+ массивом из минимум 4 положительных целых чисел. Никаких плавающих или неположительных 
+ целых чисел передаваться не будет. -->
+
+ <script>
+    function sumTwoSmallestNumbers(numbers){  
+  numbers = numbers.sort(function(a, b){return a - b; });
+  return numbers[0] + numbers[1];
+};
+ </script>
+
+ <!-- В этом кате вы создадите функцию, которая принимает список неотрицательных целых 
+  чисел и строк и возвращает новый список с отфильтрованными строками. 
+  filter_list([1,2,'a','b']) == [1,2]
+    filter_list([1,'a','b',0,15]) == [1,0,15]
+    filter_list([1,2,'aasf','1','123',123]) == [1,2,123]-->
+    <script>
+        function filter_list(l) {
+            return l.filter(v => typeof v == "number")
+            }
+    </script>
+
+<!-- Напишите функцию, которая возвращает минимальное и максимальное число 
+ из заданного списка/массива. -->
+ <script>
+    function minMax(arr){
+        return [Math.min(...arr),Math.max(...arr)]; 
+        }
+ </script>
+
+ <!-- Основная идея заключается в подсчете всех встречающихся символов в строке. 
+  Если у вас есть строка типа aba, то результат должен быть следующим {'a': 2, 'b': 1}. -->
+  <script>
+    function count(string) {
+        const obj={};
+        
+        let str=string.split('');
+        str.forEach(f => {
+            if (obj[f]){
+            obj[f]++;
+            } else {
+            obj[f]=1;
+            }
+        });
+        return obj;
+        }
+
+  </script>
 </body>
 
 </html>

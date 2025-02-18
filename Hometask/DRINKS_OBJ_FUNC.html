@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drink-obj-function</title>
+</head>
+<body>
+    <script>
+
+        function ObjStorageFunc(key, value){
+
+            let self = this;
+            let storage = {};
+
+            self.addValue = function (key, value) {
+                storage.key = value;
+            }
+
+            self.getValue = function (key) {
+                return storage.key;
+            }
+
+            self.deleteValue = function (key) {
+                return storage.hasOwnProperty(key) ? (delete storage.key, true) : false;
+            }
+
+            self.getKeys = function () {
+                return Object.keys(storage);
+            }
+
+        };
+
+        const drinkStorage = new ObjStorageFunc;
+    </script>
+
+
+    <button onclick="addDrink()">Ввод информации о напитке</button>
+    <button onclick="getDrinkInfo()">Получение информации о напитке</button>
+    <button onclick="deleteDrink()">Удаление информации о напитке</button>
+    <button onclick="listDrinks()">Перечень всех напитков</button>
+
+    <script>
+        function addDrink(){
+            let name = prompt('Напишите название напитка');
+            if (!name) return;
+
+            let alc = confirm('Если напиток алкогольный - нажмите ОК, в обратном случае - Cancel');
+
+            let recipe = prompt('Введите рецепт напитка');
+            if (!recipe) return;
+
+            drinkStorage.addValue(name, {
+            alc: alc,
+            recipe: recipe
+        }) 
+        };
+
+
+        function getDrinkInfo(){
+            let name = prompt('Введите название напитка:');
+            if (!name) return;
+
+            let drink = drinkStorage.getValue (name);
+
+            if(drink){
+                let message =`
+                напиток ${name}
+                алкогольный ${drink.alc ? 'Да' : 'Нет'}
+                рецепт ${drink.recipe}`
+                alert (message);
+            } else {
+                alert ('Напитка  ${name} нет в хранилище');
+            }
+        };
+
+        function deleteDrink(){
+            let name = prompt("Введите название напитка:");
+            if (!name) return;
+
+            if (drinkStorage.deleteValue(name)) {
+                alert('Напиток "${name}" удалён из хранилища.');
+            } else {
+                alert('Напиток "${name}" не найден в хранилище.');
+            };  
+        };
+
+        function listDrinks(){
+            let keys = drinkStorage.getKeys();
+            if (keys.length == 0){
+                alert ('Напитков нет');
+            } else {
+                let message = 'Перечень напитков:\n';
+                keys.forEach(key => message += `- ${keys}\n`);
+                alert(message);
+            };
+        };
+
+    </script>
+</body>
+</html>
