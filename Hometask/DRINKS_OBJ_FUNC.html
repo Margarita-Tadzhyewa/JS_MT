@@ -28,21 +28,21 @@
 <body>
     <script>
 
-        function ObjStorageFunc(key, value){
+        function ObjStorageFunc(){
 
             let self = this;
             let storage = {};
 
             self.addValue = function (key, value) {
-                storage.key = value;
+                storage[key] = value;
             }
 
             self.getValue = function (key) {
-                return storage.key;
+                return storage[key];
             }
 
             self.deleteValue = function (key) {
-                return storage.hasOwnProperty(key) ? (delete storage.key, true) : false;
+                return storage.hasOwnProperty(key) ? (delete storage[key], true) : false;
             }
 
             self.getKeys = function () {
@@ -90,7 +90,7 @@
                 рецепт ${drink.recipe}`
                 alert (message);
             } else {
-                alert ('Напиток "${name}" нет в хранилище');
+                alert (`Напитка ${name} нет в хранилищуchange`);
             }
         };
 
@@ -99,9 +99,9 @@
             if (!name) return;
 
             if (drinkStorage.deleteValue(name)) {
-                alert('Напиток "${name}" удалён из хранилища.');
+                alert(`Напиток ${name} удалён из хранилища.`);
             } else {
-                alert('Напиток "${name}" не найден в хранилище.');
+                alert(`Напиток ${name} не найден в хранилище.`);
             };  
         };
 
@@ -110,9 +110,9 @@
             if (keys.length == 0){
                 alert ('Напитков нет');
             } else {
-                // let message = 'Перечень напитков:\n';
-                // keys.forEach(key => message += `- ${key}\n`);
-                alert(keys);
+                let message = 'Перечень напитков:\n';
+                keys.forEach(key => message += `- ${key}\n`);
+                alert(message);
             };
         };
 
