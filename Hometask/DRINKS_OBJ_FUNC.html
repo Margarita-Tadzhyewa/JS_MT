@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drink-obj-function</title>
+    <style>
+        .btn-new {
+            text-align: center;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            background-image: linear-gradient(to right, #003CC5 0%, #0B63F6 51%, #003CC5 100%);
+            border: 0;
+            padding: 5px 20px;
+            height: 70px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .btn-new:hover {
+            background-position: right center;
+        }
+    </style>
 </head>
 <body>
     <script>
@@ -35,10 +55,10 @@
     </script>
 
 
-    <button onclick="addDrink()">Ввод информации о напитке</button>
-    <button onclick="getDrinkInfo()">Получение информации о напитке</button>
-    <button onclick="deleteDrink()">Удаление информации о напитке</button>
-    <button onclick="listDrinks()">Перечень всех напитков</button>
+    <button onclick="addDrink()" class="btn-new">Ввод информации о напитке</button> <br>
+    <button onclick="getDrinkInfo()" class="btn-new">Получение информации о напитке</button> <br>
+    <button onclick="deleteDrink()" class="btn-new">Удаление информации о напитке</button><br>
+    <button onclick="listDrinks()" class="btn-new">Перечень всех напитков</button>
 
     <script>
         function addDrink(){
@@ -90,9 +110,9 @@
             if (keys.length == 0){
                 alert ('Напитков нет');
             } else {
-                let message = 'Перечень напитков:\n';
-                keys.forEach(key => message += `- ${keys}\n`);
-                alert(message);
+                // let message = 'Перечень напитков:\n';
+                // keys.forEach(key => message += `- ${key}\n`);
+                alert(keys);
             };
         };
 
