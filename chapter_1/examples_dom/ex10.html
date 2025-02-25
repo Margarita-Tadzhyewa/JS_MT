@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пример 10</title>
+</head>
+<body>
+  
+  <p title="Подсказка" class="text">Абзац текста</p>
+
+  <script>
+    let element = document.querySelector('p');
+    element.setAttribute('class', 'new_text')
+
+    element.removeAttribute('title')
+    for(let atrr of element.attributes){
+      console.log(`${atrr.name}=${atrr.value}`)
+    }
+    console.dir(element)
+  </script>
+</body>
+</html>
