@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <!-- 
+        A3+
+        Написать чистую функцию, проверяющую, что переданная ей фраза является палиндромом.
+        (Палиндром - это фраза, которая слева направо читается так же как справа налево)
+        Массивы при решении не использовать.
+        При проверке должны игнорироваться:
+        - регистр букв;
+        - пробелы;
+        - знаки препинания;
+        - мягкие и твёрдые знаки;
+        - разница между буквами "е" и "ё".
+        Спросить у пользователя строку. Вывести через alert сообщение "это палиндром" или "это не палиндром". -->
+
+
+    <script>
+
+        function palindrom(str){
+            str = str.toLowerCase()
+            str = str.replace(' ', '').replace('ё', 'e',).replace('ь','').replace('ъ','')
+
+            let length = str.length 
+            for (let i = 0; i < Math.floor(length / 2); i++){
+                if (str[i] === str[length - 1 - i]){
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        let input = prompt("Введите строку");
+
+        if (input) {
+            alert(palindrom(input) ? "Это палиндром" : "Это не палиндром");
+        }
+
+
+
+    </script>
+</body>
+</html>

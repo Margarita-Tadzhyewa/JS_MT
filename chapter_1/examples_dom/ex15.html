@@ -13,7 +13,12 @@
   </div>
 
   <script>
+    let div = document.querySelector('div')
 
+    // копирует элемент. При true клонирует и дочерние элементы тега
+    let div2 = div.cloneNode(true)
+    div2.querySelector('p').textContent = 'one messsage'
+    div.after(div2)
   </script>
 </body>
 </html>

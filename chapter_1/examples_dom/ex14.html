@@ -16,7 +16,12 @@
   <div id="two">Два</div>
 
   <script>
-
+    let div = document.querySelector('div')
+    // Функция удаления дива через 2 секунды
+    setTimeout(() => { 
+      div.remove()
+      two.after(one)
+    }, 2000)
   </script>
 </body>
 </html>

@@ -33,7 +33,13 @@
 
 <body>
   <script>
+    // сортировка по возрасту
+    // получаем массив из строк таблицы
+    let sortRows = Array.from(table.rows).slice(1).sort((rowA, rowB) =>{
+      return rowA.cells[1].innerHTML - rowB.cells[1].innerHTML;
+    })
 
+    table.tBodies[0].append(...sortRows)
   </script>
 </body>
 

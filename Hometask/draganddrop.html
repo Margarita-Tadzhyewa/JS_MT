@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=UTF-8>
+    <title>drag&amp;drop</title>
+  </head>
+  <body style='min-height: 100vh'>
+<img src='http://fe.it-academy.by/Sites/0000007/sax.jpg'>
+<img src='http://fe.it-academy.by/Sites/0000007/Yin_and_Yang.png' width=100 style='vertical-align: 20px'>
+<img src='http://fe.it-academy.by/Sites/0000007/Man-and-woman.png' width=150>
+<img src='http://fe.it-academy.by/Sites/0000007/No_smoking.png' style='padding-left: 50px'>
+ 
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        let draggedElement = null; // элемент который мы перетаскиваем 
+        let shiftX = 0;
+        let shiftY = 0;
+        let zIndex = 1; // чтобы картинка была поверх остальных 
+
+        document.querySelectorAll("img").forEach(img => {
+            img.style.position = "absolute";
+            img.style.cursor = "grab";
+            img.addEventListener("mousedown", onMouseDown);
+        });
+
+        function onMouseDown(event) {
+            event.preventDefault();
+            draggedElement = event.target;  // cсылка на DOM-элемент, к которому идёт касание
+            draggedElement.style.cursor = "grabbing";
+            draggedElement.style.zIndex = zIndex++;
+
+            let rect = draggedElement.getBoundingClientRect();
+            shiftX = event.clientX - rect.left;
+            shiftY = event.clientY - rect.top;
+
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+        }
+
+        function onMouseMove(event) {
+            if (!draggedElement) return;
+            event.preventDefault();
+            draggedElement.style.left = `${event.clientX - shiftX}px`;
+            draggedElement.style.top = `${event.clientY - shiftY}px`;
+        }
+
+        function onMouseUp(event) {
+            event.preventDefault();
+            if (draggedElement) {
+                draggedElement.style.cursor = "grab";
+                draggedElement = null;
+            }
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        }
+    });
+
+
+</script> 
+
+  </body>
+</html>
