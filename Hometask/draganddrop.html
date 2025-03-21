@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset=UTF-8>
-    <title>drag&amp;drop</title>
+    <title>drag&drop</title>
   </head>
   <body style='min-height: 100vh'>
 <img src='http://fe.it-academy.by/Sites/0000007/sax.jpg'>
@@ -11,18 +11,40 @@
 <img src='http://fe.it-academy.by/Sites/0000007/No_smoking.png' style='padding-left: 50px'>
  
 <script>
-
-    document.addEventListener("DOMContentLoaded", () => {
+    window.addEventListener("load", () => {
         let draggedElement = null; // элемент который мы перетаскиваем 
         let shiftX = 0;
         let shiftY = 0;
         let zIndex = 1; // чтобы картинка была поверх остальных 
 
-        document.querySelectorAll("img").forEach(img => {
-            img.style.position = "absolute";
-            img.style.cursor = "grab";
-            img.addEventListener("mousedown", onMouseDown);
-        });
+        const imgs = document.querySelectorAll("img");
+        posImg(imgs);
+
+        function posImg(imgs) {
+            posAbsolute(imgs, findPos(imgs));
+        }
+
+        function findPos(imgs) {
+            const startPos = [];
+            imgs.forEach((elem) => {
+                const coords = elem.getBoundingClientRect();
+                const left = coords.left;
+                const top = coords.top;
+                startPos.push({ left, top });
+            });
+            return startPos;
+        }
+
+        function posAbsolute(imgs, startPos) {
+            imgs.forEach((elem, index) => {
+                const { left, top } = startPos[index];
+                elem.style.position = 'absolute';
+                elem.style.left = `${left}px`;
+                elem.style.top = `${top}px`;
+                elem.style.cursor = "grab";
+                elem.addEventListener("mousedown", onMouseDown);
+            });
+        }
 
         function onMouseDown(event) {
             event.preventDefault();
@@ -55,9 +77,6 @@
             document.removeEventListener("mouseup", onMouseUp);
         }
     });
-
-
 </script> 
-
   </body>
 </html>

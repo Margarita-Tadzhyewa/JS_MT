@@ -1,61 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-    
-    <img src="https://js.cx/clipart/ball.svg" style="cursor: pointer; position: absolute; z-index: 1000; left: 204px; top: 206px;" width="40" height="40" id="ball">
-
-
-    <script>
-            ball.onmousedown = function (event) { // (1) отследить нажатие
-
-                let shiftX = event.clientX - ball.getBoundingClientRect().left;
-                let shiftY = event.clientY - ball.getBoundingClientRect().top;
-
-                // (2) подготовить к перемещению:
-                // разместить поверх остального содержимого и в абсолютных координатах
-                ball.style.position = 'absolute';
-                ball.style.zIndex = 1000;
-
-                // переместим в body, чтобы мяч был точно не внутри position:relative
-                document.body.append(ball);
-
-                // и установим абсолютно спозиционированный мяч под курсор
-                moveAt(event.pageX, event.pageY);
-
-                // передвинуть мяч под координаты курсора
-                // и сдвинуть на половину ширины/высоты для центрирования
-                function moveAt(pageX, pageY) {
-                    ball.style.left = pageX - shiftX + 'px';
-                    ball.style.top = pageY - shiftY + 'px';
-                }
-
-                function onMouseMove(event) {
-                    moveAt(event.pageX, event.pageY);
-                }
-
-                // (3) перемещать по экрану
-                document.addEventListener('mousemove', onMouseMove);
-
-                // (4) положить мяч, удалить более ненужные обработчики событий
-                ball.onmouseup = function () {
-                    document.removeEventListener('mousemove', onMouseMove);
-                    ball.onmouseup = null;
-                };
-
-                ball.ondragstart = function() {
-                    return false;
-                    };
-
-            };
-    </script>
-    
-</body>
+<html>
+  <head>
+    <meta charset=UTF-8>
+    <title>drag&drop</title>
+  </head>
+  <body style='min-height: 100vh'>
+<img src='http://fe.it-academy.by/Sites/0000007/sax.jpg'>
+<img src='http://fe.it-academy.by/Sites/0000007/Yin_and_Yang.png' width=100 style='vertical-align: 20px'>
+<img src='http://fe.it-academy.by/Sites/0000007/Man-and-woman.png' width=150>
+<img src='http://fe.it-academy.by/Sites/0000007/No_smoking.png' style='padding-left: 50px'>
+ 
+<script>
+    window.addEventListener("load", () => {
+        let draggedElement = null;
+        let shiftX = 0;
+        let shiftY = 0;
+        let zIndex = 1;
+        
+        const images = document.querySelectorAll("img");
+        initImages(images);
+        
+        function collectInitialCoordinates(images) {
+            const initialCoords = [];
+            images.forEach((elem) => {
+                const coords = elem.getBoundingClientRect();
+                const left = coords.left + window.pageXOffset;
+                const top = coords.top + window.pageYOffset;
+                initialCoords.push({ left, top });
+            });
+            return initialCoords;
+        }
+        
+        function positionImages(images, initialCoords) {
+            images.forEach((elem, index) => {
+                const { left, top } = initialCoords[index];
+                elem.style.position = 'absolute';
+                elem.style.left = `${left}px`;
+                elem.style.top = `${top}px`;
+                elem.style.margin = "0";
+                elem.style.cursor = "grab";
+                elem.addEventListener("mousedown", onMouseDown);
+            });
+        }
+        
+        function initImages(images) {
+            const initialCoords = collectInitialCoordinates(images);
+            positionImages(images, initialCoords);
+        }
+        
+        function onMouseDown(event) {
+            event.preventDefault();
+            draggedElement = event.target;
+            draggedElement.style.cursor = "grabbing";
+            draggedElement.style.zIndex = zIndex++;
+            
+            let rect = draggedElement.getBoundingClientRect();
+            shiftX = event.clientX - rect.left;
+            shiftY = event.clientY - rect.top;
+            
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+        }
+        
+        function onMouseMove(event) {
+            if (!draggedElement) return;
+            event.preventDefault();
+            draggedElement.style.left = `${event.clientX - shiftX}px`;
+            draggedElement.style.top = `${event.clientY - shiftY}px`;
+        }
+        
+        function onMouseUp(event) {
+            event.preventDefault();
+            if (draggedElement) {
+                draggedElement.style.cursor = "grab";
+                draggedElement = null;
+            }
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        }
+    });
+</script> 
+  </body>
 </html>
-
-
