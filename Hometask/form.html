@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valid Form</title>
+</head>
+<style>
+    span{
+        color: red;
+    }
+</style>
+<body>
+
+    <form name='FFF' action='https://fe.it-academy.by/TestForm.php' novalidate>
+        Разработчики: <input type=text name='razr'><span id="razrErr"></span><br />
+        Название сайта: <input type=text name='size'><span id="sizeErr"></span><br />
+        URL сайта: <input type=text name='url'><span id="urlErr"></span><br />
+        Дата запуска сайта: <input type=date name='date'><span id="dateErr"></span><br />
+        Посетителей в сутки: <input type=text name='visitors'><span id="visitorsErr"></span><br />
+        E-mail для связи: <input type=text name='email'><span id="emailErr"></span><br />
+        Рубрика каталога:
+        <select name='catalog'>
+            <option value=1>здоровье</option>
+            <option value=2>домашний уют</option>
+            <option value=3>бытовая техника</option>
+        </select><span id="catalogErr"></span><br>
+        Размещение:
+            <input type=radio name='place' value=11>бесплатное
+            <input type=radio name='place' value=22>платное
+            <input type=radio name='place' value=33>VIP <span id="placeErr"></span><br />
+        Разрешить отзывы: <input type=checkbox name='agree'><span id="agreeErr"></span><br />
+
+        <input type='submit' value='опубликовать'><span id="razrErr"></span>
+    </form>
+    
+
+
+
+
+
+    <script>
+
+        document.forms.FFF.elements.razr.onblur = () => validRazr(false);
+        document.forms.FFF.elements.size.onblur = () => validSite(false);
+        document.forms.FFF.elements.url.onblur = () => validURL(false);
+        document.forms.FFF.elements.visitors.onblur = () => validVisitors(false);
+        document.forms.FFF.elements.date.onblur = () => validDate(false);
+        document.forms.FFF.elements.email.onblur = () => validEmail(false);
+        document.forms.FFF.elements.catalog.onblur = () => validCatalog(false);
+
+
+        document.forms.FFF.elements.agree.onblur = () => validAgree(false);
+        document.forms.FFF.elements.place.onblur = () => validPlace(false);
+        document.forms.FFF.onsubmit = submit;
+
+        // Ошибка, если введено лишь одно слово(типо только имя или только фамилия разработчика)
+        function validRazr(focusOnError) {
+            const elem = document.forms.FFF.elements.razr;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('razrErr').innerHTML = 'Заполните разработчиков';
+                errCount++;
+            } else if (value.split(/\s+/).length < 2) {
+                document.getElementById('razrErr').innerHTML = 'Введите больше одного слова';
+                errCount++;
+            } else {
+                document.getElementById('razrErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+
+        // Название сайта должно содержать не менее 10 символов
+        function validSite(focusOnError) {
+            const elem = document.forms.FFF.elements.size;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('sizeErr').innerHTML = 'Заполните название сайта';
+                errCount++;
+            } else if (value.length < 10) {
+                document.getElementById('sizeErr').innerHTML = 'Название сайта должно содержать не менее 10 символов';
+                errCount++;
+            } else {
+                document.getElementById('sizeErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+         
+        // Строка должна начинаться с http
+        function validURL(focusOnError) {
+            const elem = document.forms.FFF.elements.url;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('urlErr').innerHTML = 'Заполните URL сайта';
+                errCount++;
+            } else if (!value.startsWith("http")) {
+                document.getElementById('urlErr').innerHTML = 'URL должен начинаться с "http"';
+                errCount++;
+            } else {
+                document.getElementById('urlErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+        // Если введено не число или число меньше 0
+        function validVisitors(focusOnError) {
+            const elem = document.forms.FFF.elements.visitors;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('visitorsErr').innerHTML = 'Заполните URL сайта';
+                errCount++;
+            } else if (isNaN(value)) {
+                document.getElementById('visitorsErr').innerHTML = 'Введите число';
+                errCount++;
+            } else if (Number(value) <=0) {
+                document.getElementById('visitorsErr').innerHTML = 'Число должно быть больше 0';
+                errCount++;
+            } else {
+                document.getElementById('visitorsErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+
+
+
+        // Если сайт старый, то есть был разработан раньше чем в 2020
+        function validDate(focusOnError) {
+            const elem = document.forms.FFF.elements.date;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('dateErr').innerHTML = 'Заполните дату';
+                errCount++;
+            } else {
+                const year = new Date(value).getFullYear();
+
+                if (year < 2020){
+                    document.getElementById('dateErr').innerHTML = 'Год не может быть меньше 2020';
+                    errCount++;
+            
+                } else {
+                    document.getElementById('dateErr').innerHTML = '';
+                }
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+        // Если в эл. почте нет собаки, то не работает
+        function validEmail(focusOnError) {
+            const elem = document.forms.FFF.elements.email;
+            const value = elem.value.trim();
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('emailErr').innerHTML = 'Заполните электронную почту';
+                errCount++;
+            } else if (!value.includes("@")) {
+                document.getElementById('emailErr').innerHTML = 'Почта должна содержать знак @';
+                errCount++;
+            
+            } else {
+                    document.getElementById('emailErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+        // Домашний уют больше нельзя выбрать
+        function validCatalog(focusOnError) {
+            const elem = document.forms.FFF.elements.catalog;
+            const value = elem.value.trim();
+
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('catalogErr').innerHTML = 'Выберите что-нибудь';
+                errCount++;
+            } else if (value == 2) {
+                document.getElementById('catalogErr').innerHTML = 'Домашний уют больше нельзя выбрать';
+                errCount++;
+            } else {
+                document.getElementById('catalogErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+        // Ошибка если не выбрали Разрешить отзывы
+        function validAgree(focusOnError) {
+            const elem = document.forms.FFF.elements.agree;
+            const value = elem.checked;
+            let errCount = 0;
+
+            if (!value) {
+                document.getElementById('agreeErr').innerHTML = 'Вы не разрешили отзывы';
+                errCount++;
+            } else {
+                document.getElementById('agreeErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elem.focus();
+            }
+
+            return errCount;
+        }
+
+
+
+        function validPlace(focusOnError) {
+            const elems = document.forms.FFF.elements.place;
+            let selectedValue = null;
+            let errCount = 0;
+
+            // проверяем выбрана ли какая-то из кнопок
+            for (let elem of elems) {
+                if (elem.checked) {
+                    selectedValue = elem.value;
+                    break;
+                }
+            }
+
+            if (!selectedValue) {
+                document.getElementById('placeErr').innerHTML = 'Вы не выбрали вариант';
+                errCount++;
+            } else if (selectedValue === '33') {
+                document.getElementById('placeErr').innerHTML = 'VIP вам недоступен';
+                errCount++;
+            } else {
+                document.getElementById('placeErr').innerHTML = '';
+            }
+
+            if (errCount > 0 && focusOnError) {
+                elems[0].focus();
+            }
+
+            return errCount;
+        }
+
+        // обработчик на изменение состояния радиокнопок
+        const placeRadios = document.forms.FFF.elements.place;
+        for (let radio of placeRadios) {
+                radio.addEventListener("change", () => validPlace(false));
+        }
+
+        function submit(eo){
+            let errCount = 0;
+            errCount+=validRazr(!errCount);
+            errCount+=validSite(!errCount);
+            errCount+=validURL(!errCount);
+            errCount+=validVisitors(!errCount);
+            errCount+=validDate(!errCount);
+            errCount+=validEmail(!errCount);
+            errCount+=validCatalog(!errCount);
+            errCount+=validAgree(!errCount);
+            errCount+=validPlace(!errCount);
+
+
+            if(errCount){
+                eo.preventDefault();
+            }
+        }
+    </script> 
+</body>
+</html>
+
