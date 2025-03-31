@@ -47,10 +47,10 @@
         document.forms.FFF.elements.visitors.onblur = () => validVisitors(false);
         document.forms.FFF.elements.date.onblur = () => validDate(false);
         document.forms.FFF.elements.email.onblur = () => validEmail(false);
-        document.forms.FFF.elements.catalog.onblur = () => validCatalog(false);
+        document.forms.FFF.elements.catalog.addEventListener("change", () => validCatalog(false));
 
 
-        document.forms.FFF.elements.agree.onblur = () => validAgree(false);
+        document.forms.FFF.elements.agree.addEventListener("change", () => validAgree(false));
         document.forms.FFF.elements.place.onblur = () => validPlace(false);
         document.forms.FFF.onsubmit = submit;
 
@@ -215,8 +215,8 @@
             if (!value) {
                 document.getElementById('catalogErr').innerHTML = 'Выберите что-нибудь';
                 errCount++;
-            } else if (value == 2) {
-                document.getElementById('catalogErr').innerHTML = 'Домашний уют больше нельзя выбрать';
+            } else if (value == 1) {
+                document.getElementById('catalogErr').innerHTML = 'Здоровье нельзя выбрать';
                 errCount++;
             } else {
                 document.getElementById('catalogErr').innerHTML = '';
@@ -286,6 +286,8 @@
         for (let radio of placeRadios) {
                 radio.addEventListener("change", () => validPlace(false));
         }
+
+        
 
         function submit(eo){
             let errCount = 0;
