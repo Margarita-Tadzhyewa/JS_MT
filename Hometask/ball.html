@@ -82,3 +82,89 @@
 </script> 
   </body>
 </html>
+
+
+
+<script>
+    function buildClock() {
+        const diam = document.getElementById('diameterInput').value;
+        if(diam < 200 || diam > 800){
+            alert("Диаметр должен быть между 200 и 800 пикселями!");
+            return;
+        }
+        const clock = document.getElementById('clock');
+        clock.style.width = `${diam}px`;
+        clock.style.height = `${diam}px`;
+        clock.style.visibility = 'visible';
+        const center = diam/2;
+
+
+        const sec = document.getElementById('secarr');
+        const secH = sec.style.height = center - 20 + 'px';
+        sec.style.position = 'absolute';
+        sec.style.left = center + 'px';
+        sec.style.top = center - parseInt(secH) + 'px';
+        sec.style.zIndex = '2'
+
+
+        const min = document.getElementById('minarr');
+        const minH = min.style.height = center - 50 + 'px';
+        min.style.position = 'absolute';
+        min.style.left = center + 'px';
+        min.style.top = center - parseInt(minH) + 'px';
+        min.style.zIndex = '3'
+
+
+        const hr = document.getElementById('hourarr');
+        const hrH = hr.style.height = center - 100 + 'px';
+        hr.style.position = 'absolute';
+        hr.style.left = center + 'px';
+        hr.style.top = center - parseInt(hrH) + 'px';
+        hr.style.zIndex = '4'
+
+        
+        const centerX = center;
+        const centerY = center;
+        const circle = diam%92;
+        const hourRadius = circle / 2;
+        const r = diam / 2 - 35;
+
+
+
+
+        for (let h = 1; h <= 12; h++) {
+            const angle = 2 * Math.PI / 12 * h;
+            const hourX = centerX + Math.sin(angle) * r;
+            const hourY = centerY - Math.cos(angle) * r;
+            const hourElem = document.createElement('div');
+            hourElem.className = 'hour-mark';
+            hourElem.style.width = circle + 'px';
+            hourElem.style.height = circle + 'px';
+            hourElem.style.position = 'absolute';
+            hourElem.style.left = (hourX - hourRadius) + 'px';
+            hourElem.style.top = (hourY - hourRadius) + 'px';
+            hourElem.textContent = h;
+            hourElem.style.lineHeight = (hourRadius * 2) + 'px';
+            clock.appendChild(hourElem);
+        }
+        document.getElementById('diameterInput').style.display = 'none';
+        document.getElementById('build').style.display = 'none';
+    }
+    setInterval(pos, 1000);
+    pos();
+    function pos() {
+        const dt = new Date();
+        const h = dt.getHours() % 12;
+        const m = dt.getMinutes();
+        const s = dt.getSeconds();
+        const sa = 360 / 60 * s;
+        const ma = 360 / 60 * (m + s / 60);
+        const ha = 360 / 12 * (h + m / 60);
+        console.log(`Текущее время: ${h}:${m}:${s}`);
+        document.getElementById('secarr').style.transform = `rotate(${sa}deg)`
+        document.getElementById('minarr').style.transform = `rotate(${ma}deg)`
+        document.getElementById('hourarr').style.transform = `rotate(${ha}deg)`
+    }
+</script>
+</body>
+

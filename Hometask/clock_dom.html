@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clock dom</title>
+</head>
+<style>
+
+</style>
+<body>
+    
+    <input type="text" name="diam" placeholder="Введите диаметр" id="diamInput" pl>
+    <input type="submit" value="Построить часы" id="submitButton">
+    <p id="errorMsg" style="color: red;"></p>
+
+    <script>
+        document.getElementById("submitButton").addEventListener("click", createClocks);
+
+
+        function createClocks(eo){
+            eo.preventDefault();
+
+            let diamValue = parseInt(document.getElementById("diamInput").value);
+            let errorMsg = document.getElementById("errorMsg");
+
+            if(isNaN(diamValue) || diamValue < 200 || diamValue > 800){
+                errorMsg.textContent = "Введите число от 200 до 800";
+                return;
+            }
+
+            document.querySelectorAll('input').forEach(input => {
+                input.style.display = 'none';
+            });
+
+
+            errorMsg.textContent = ""; // Очищаем ошибку, если всё ок
+            clocks(diamValue);
+        }
+
+
+        function clocks(diam){
+
+            const k=diam/500;
+            const centerX=diam/2;
+            const centerY=diam/2;
+            const circle = diam%92;
+            const hourRadius =  circle / 2;
+            const r = diam / 2 - 35;
+
+
+            let newDiv = document.createElement("div"); 
+            newDiv.style.width = diam + 'px'; 
+            newDiv.style.height = diam + 'px';
+            newDiv.style.position = "relative"; 
+            newDiv.style.backgroundColor = "yellow"; 
+            newDiv.style.borderRadius = "50%";
+
+
+            document.body.appendChild(newDiv); // Добавляем div в конец body
+
+            let currentTime = document.createElement("div");
+            currentTime.id = "currentTime";
+            currentTime.style.position = "absolute";
+            currentTime.style.width = "100%";
+            currentTime.style.textAlign = "center";
+            currentTime.style.top = centerY * 0.3 + "px";
+            currentTime.style.fontSize = (diam * 0.07) + "px";
+            currentTime.style.fontWeight = "bold";
+            newDiv.appendChild(currentTime);
+
+
+            for (let h=1; h <=12; h++){
+                const angle = (2*Math.PI/12)*h;
+                const hourX=centerX+Math.sin(angle)*r;
+                const hourY=centerY-Math.cos(angle)*r;
+
+                const hourElem = document.createElement('div');
+                hourElem.style.backgroundColor = 'green';
+                hourElem.style.borderRadius = "50%";
+                hourElem.style.position = "absolute";
+                hourElem.style.width = circle + 'px'; 
+                hourElem.style.height = circle + 'px';
+                hourElem.style.left = (hourX-hourRadius) + 'px';
+                hourElem.style.top = (hourY-hourRadius) + 'px';
+                hourElem.textContent = h;
+                hourElem.style.lineHeight = (hourRadius * 2) + 'px';
+                hourElem.style.textAlign = "center";
+
+                newDiv.appendChild(hourElem);
+
+            }
+
+            // Создаем стрелки
+            const hArrow = createArrow(centerY * 0.3, "7px", "black", centerX, centerY);
+            hArrow.id = "hourArrow";
+
+            const mArrow = createArrow(centerY * 0.5, "5px", "black", centerX, centerY);
+            mArrow.id = "minarr";
+
+            const sArrow = createArrow(centerY * 0.7, "2px", "black", centerX, centerY);
+            sArrow.id = "secarr";
+
+            newDiv.appendChild(hArrow);
+            newDiv.appendChild(mArrow);
+            newDiv.appendChild(sArrow);
+
+            setInterval(pos, 1000);
+            pos();
+        }
+
+        function createArrow(height, width, color, centerX, centerY) {
+            const arrow = document.createElement("div");
+            arrow.style.position = "absolute";
+            arrow.style.width = width;
+            arrow.style.height = height + "px";
+            arrow.style.backgroundColor = color;
+            arrow.style.left = centerX - parseInt(width) / 2 + "px";
+            arrow.style.top = centerY - height + "px";
+            arrow.style.transformOrigin = `50% ${height}px`;
+            return arrow;
+        }
+
+        function pos() {
+            const dt = new Date();
+            const h = dt.getHours() % 12;
+            const m = dt.getMinutes();
+            const s = dt.getSeconds();
+
+            const hAngle = 360 / 12 * (h + m / 60);
+            const mAngle = 360 / 60 * (m + s / 60);
+            const sAngle = 360 / 60 * s;
+
+            document.getElementById('hourArrow').style.transform = `rotate(${hAngle}deg)`;
+            document.getElementById('minarr').style.transform = `rotate(${mAngle}deg)`;
+            document.getElementById('secarr').style.transform = `rotate(${sAngle}deg)`;
+
+            document.getElementById('currentTime').textContent = dt.toLocaleTimeString();
+        }
+    </script>
+
+</body>
+</html>
