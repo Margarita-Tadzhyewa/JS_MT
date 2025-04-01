@@ -64,8 +64,8 @@
             currentTime.style.position = "absolute";
             currentTime.style.width = "100%";
             currentTime.style.textAlign = "center";
-            currentTime.style.top = centerY * 0.3 + "px";
-            currentTime.style.fontSize = (diam * 0.07) + "px";
+            currentTime.style.top = centerY * 0.5 + "px";
+            currentTime.style.fontSize = (diam * 0.04) + "px";
             currentTime.style.fontWeight = "bold";
             newDiv.appendChild(currentTime);
 
@@ -85,6 +85,7 @@
                 hourElem.style.top = (hourY-hourRadius) + 'px';
                 hourElem.textContent = h;
                 hourElem.style.lineHeight = (hourRadius * 2) + 'px';
+                hourElem.style.fontSize = (diam * 0.04) + "px";
                 hourElem.style.textAlign = "center";
 
                 newDiv.appendChild(hourElem);
@@ -92,13 +93,13 @@
             }
 
             // Создаем стрелки
-            const hArrow = createArrow(centerY * 0.3, "7px", "black", centerX, centerY);
+            const hArrow = createArrow(centerY * 0.3, diam * 0.015, "black", centerX, centerY);
             hArrow.id = "hourArrow";
 
-            const mArrow = createArrow(centerY * 0.5, "5px", "black", centerX, centerY);
+            const mArrow = createArrow(centerY * 0.5, diam * 0.01, "black", centerX, centerY);
             mArrow.id = "minarr";
 
-            const sArrow = createArrow(centerY * 0.7, "2px", "black", centerX, centerY);
+            const sArrow = createArrow(centerY * 0.7, diam * 0.005, "black", centerX, centerY);
             sArrow.id = "secarr";
 
             newDiv.appendChild(hArrow);
@@ -112,10 +113,10 @@
         function createArrow(height, width, color, centerX, centerY) {
             const arrow = document.createElement("div");
             arrow.style.position = "absolute";
-            arrow.style.width = width;
+            arrow.style.width = width + 'px';
             arrow.style.height = height + "px";
             arrow.style.backgroundColor = color;
-            arrow.style.left = centerX - parseInt(width) / 2 + "px";
+            arrow.style.left = centerX - width / 2 + "px";
             arrow.style.top = centerY - height + "px";
             arrow.style.transformOrigin = `50% ${height}px`;
             return arrow;
