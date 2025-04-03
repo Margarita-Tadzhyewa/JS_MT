@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis</title>
+</head>
+<style>
+    #area{
+        background: yellow;
+    }
+
+    #rRacket{
+        position: absolute;
+        background: green;
+        width: 20px;
+        height: 90px;
+    }
+
+    #lRacket{
+        position: absolute;
+        background: blue;
+        width: 20px;
+        height: 90px;
+    }
+
+    #ball{
+        position: absolute;
+        background: red;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+</style>
+<body>
+    <input type="button" id="butStart" value="Start">
+    <div id="score">
+        <div id="leftScore">0</div><span>:</span>
+        <div id="rightScore">0</div>
+    </div>
+    <div id="area">
+        <div id="lRacket"></div>
+
+        <div id="ball"></div>
+
+        <div id="rRacket"></div>
+
+    </div>
+
+
+    <script type="text/javascript" src="TENNIS_DOM.js"></script>
+    
+</body>
+</html>
