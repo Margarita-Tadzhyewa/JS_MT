@@ -1,26 +1,33 @@
 // Устанавливаем размеры поля
-let widthAr = '800px';
-let heightAr = '500px';
+let widthAr = 800;
+let heightAr = 500;
 
 let area = document.getElementById('area');
-area.style.width = widthAr;
-area.style.height = heightAr;
+area.style.width = `${widthAr}px`;
+area.style.height = `${heightAr}px`;
 
 // Событие на кнопку Старт
 let buttonStart = document.getElementById('butStart');
-butStart.onclick = start;
+buttonStart.onclick = start; /* */ 
 
 // Работа с ракетками
 let racketLeft = document.getElementById('lRacket');
 let racketRight = document.getElementById('rRacket');
-let height = parseFloat(getComputedStyle(document.getElementById("lRacket")).height);
-let width = parseFloat(getComputedStyle(document.getElementById("lRacket")).width);
+
+let racketHeight = parseFloat(getComputedStyle(document.getElementById("lRacket")).height);
+let racketWidth = parseFloat(getComputedStyle(document.getElementById("lRacket")).width);
 
 // площадь в которой движутся ракетки
 let racketArea = {
-    widthRacketArea : width,
-    height : area.getBoundingClientRect().height
+    width : racketWidth,
+    height : heightAr /* ?????*/ 
 };
+
+// площадь в которой двигается мяч
+let areaH = {
+    width: widthAr, /* 800*/
+    height: heightAr /* 500*/
+}
 
 //Мяч и его начальные позиции
 let ball = document.getElementById('ball');
@@ -30,10 +37,10 @@ let widthBall = parseFloat(getComputedStyle(document.getElementById("ball")).wid
 
 // Объект управления положением мяча и его движением
 let ballPos ={
-    posX: area.getBoundingClientRect().left + area.getBoundingClientRect().width/2 - ball.getBoundingClientRect().width/2,
-	posY: area.getBoundingClientRect().top + area.getBoundingClientRect().height/2 - ball.getBoundingClientRect().height/2,
-	speedX: 0, //ballH.speedX = 4
-	speedY: 0, //ballH.speedY = 2
+    posX: (widthAr - widthBall) / 2,
+	posY: (heightAr - heightBall) / 2,
+	speedX: 0, 
+	speedY: 0, 
 	width: widthBall,
 	height: heightBall,
 
@@ -50,17 +57,16 @@ ballPos.ballStartPos();
 // Устанавливаем начальные позиции ракетов
 let racketH = {
     // Левая ракетка, её начальные позиции и скорость
-    racketLeftX: area.getBoundingClientRect().left,
-    racketLeftY: area.getBoundingClientRect().top + area.getBoundingClientRect().height/2 - racketLeft.getBoundingClientRect().height/2,
+    racketLeftX: 0,
+    racketLeftY: (heightAr - racketHeight)/2,
 	racketLeftSpeed: 0,
 
     // Правая ракетка, её начальные позиции и скорость
-    racketRightX: area.getBoundingClientRect().left + area.getBoundingClientRect().width - racketRight.getBoundingClientRect().width,
-    racketRightY: area.getBoundingClientRect().top + area.getBoundingClientRect().height/2 - racketRight.getBoundingClientRect().height/2,
+    racketRightX: (widthAr - racketWidth),
+    racketRightY: (heightAr - racketHeight)/2,
 	racketRightSpeed: 0,
 
     racketStartPos: function () {
-        let self = this;
 
         racketLeft.style.left = this.racketLeftX + "px";
         racketLeft.style.top = this.racketLeftY + "px";
@@ -74,6 +80,13 @@ let racketH = {
 // Вызываем функцию, чтобы ракетки стали в начальную позицию
 racketH.racketStartPos();
 
+// Счетчик голов
+const scoreBoard = document.getElementById('scoreBoard');
+    let score1 = 0;
+    let score2 = 0;
+// Вызываем функцию
+scoreBoardInnerHTML();
+
 // Хранит соотвествие между клавишами и скоростью
 const controls = {
     "ControlLeft": { player: "racketLeftSpeed", speed: 5 }, // Левая ракетка вниз (Ctrl)
@@ -83,40 +96,49 @@ const controls = {
 }
 
 // При нажатии клавиши
-window.addEventListener("keydown", function(event) {
-    if (controls[event.code]) {  // Используем event.code вместо event.key
-        event.preventDefault();
-        racketH[controls[event.code].player] = controls[event.code].speed;
+window.addEventListener("keydown", function(eo) {
+    if (controls[eo.code]) {  
+        eo.preventDefault();
+        racketH[controls[eo.code].player] = controls[eo.code].speed;
     }
 });
 
 // При отпускании клавиши
-window.addEventListener("keyup", function(event) {
-    if (controls[event.code]) {  // Используем event.code вместо event.key
-        event.preventDefault();
-        racketH[controls[event.code].player] = 0;
+window.addEventListener("keyup", function(eo) {
+    if (controls[eo.code]) {  
+        eo.preventDefault();
+        racketH[controls[eo.code].player] = 0;
     }
 });
 
+// Функция для счётчика
+function scoreBoardInnerHTML() {
+    scoreBoard.innerHTML = score1 + ':' + score2;
+};
+
 
 function moveRackets() {
+    racketH.racketStartPos();
     racketH.racketLeftY += racketH.racketLeftSpeed;
     racketH.racketRightY += racketH.racketRightSpeed;
 
     // Ограничения для левой ракетки
-    if (racketH.racketLeftY < area.getBoundingClientRect().top) {
-        racketH.racketLeftY = area.getBoundingClientRect().top;
+    if (racketH.racketLeftY + racketHeight > racketArea.height) {
+        racketH.racketLeftY = racketArea.height - racketHeight;
     }
-    if (racketH.racketLeftY + height > area.getBoundingClientRect().top + racketArea.height) {
-        racketH.racketLeftY = area.getBoundingClientRect().top + racketArea.height - height;
+    // вылетела ли левая ракетка выше потолка?
+    if (racketH.racketLeftY < 0) {
+        racketH.racketLeftY = 0;
     }
 
     // Ограничения для правой ракетки
-    if (racketH.racketRightY < area.getBoundingClientRect().top) {
-        racketH.racketRightY = area.getBoundingClientRect().top;
+    if (racketH.racketRightY + racketHeight > racketArea.height) {
+        racketH.racketRightY = racketArea.height - racketHeight;
     }
-    if (racketH.racketRightY + height > area.getBoundingClientRect().top + racketArea.height) {
-        racketH.racketRightY = area.getBoundingClientRect().top + racketArea.height - height;
+
+    // вылетела ли левая ракетка выше потолка?
+    if (racketH.racketRightY < 0) {
+        racketH.racketRightY = 0;
     }
 
     // Применение новых позиций к стилям
@@ -129,71 +151,90 @@ function moveRackets() {
 // Запускаем движение ракеток сразу
 moveRackets();
 
+let ballStopped = false; // флаг остановки мяча после гола
+
 function moveBall() {
+    if (ballStopped) return; // Если мяч остановлен, выходим из функции
+
     ballPos.posX += ballPos.speedX;
     ballPos.posY += ballPos.speedY;
 
-    if (ballPos.posY <= area.getBoundingClientRect().top || ballPos.posY + ballPos.height >= area.getBoundingClientRect().top + racketArea.height) {
+    // Проверка столкновения с верхней и нижней границей
+    if (ballPos.posY <= 0 || ballPos.posY + ballPos.height >= areaH.height) {
         ballPos.speedY = -ballPos.speedY;
     }
 
+    // Проверка столкновения с левой ракеткой
     if (
-        (ballPos.posX <= racketH.racketLeftX + width && ballPos.posY + ballPos.height >= racketH.racketLeftY && ballPos.posY <= racketH.racketLeftY + height) ||
-        (ballPos.posX + ballPos.width >= racketH.racketRightX && ballPos.posY + ballPos.height >= racketH.racketRightY && ballPos.posY <= racketH.racketRightY + height)
+        ballPos.posX <= racketH.racketLeftX + racketWidth &&
+        ballPos.posY + ballPos.height >= racketH.racketLeftY &&
+        ballPos.posY <= racketH.racketLeftY + racketHeight
     ) {
         ballPos.speedX = -ballPos.speedX;
+        ballPos.posX = racketH.racketLeftX + racketWidth; // фиксируем мяч, чтобы он не застревал
     }
 
+    // Проверка столкновения с правой ракеткой
+    if (
+        ballPos.posX + ballPos.width >= racketH.racketRightX &&
+        ballPos.posY + ballPos.height >= racketH.racketRightY &&
+        ballPos.posY <= racketH.racketRightY + racketHeight
+    ) {
+        ballPos.speedX = -ballPos.speedX;
+        ballPos.posX = racketH.racketRightX - ballPos.width; 
+    }
+
+    // Проверка на гол (мяч вылетел за границы поля)
+    if (ballPos.posX <= 0) {
+        score2++; // Правая сторона получает гол
+        resetBall();
+    } else if (ballPos.posX + ballPos.width >= areaH.width) {
+        score1++; // Левая сторона получает гол
+        resetBall();
+    }
+
+    // Применение новых позиций к мячу
     ball.style.left = ballPos.posX + "px";
     ball.style.top = ballPos.posY + "px";
 
     requestAnimationFrame(moveBall);
 }
 
-// function moveBall() {
-//     // Движение мяча
-//     ballPos.posX -= ballPos.speedX;
-//     ballPos.posY -= ballPos.speedY;
+// Функция сброса мяча после гола
+function resetBall() {
+    ballStopped = true; //  флаг, чтобы мяч больше не двигался
+    ballPos.speedX = 0;
+    ballPos.speedY = 0;
 
-//     // Проверка на столкновение с левой границей (пропущенный гол)
-//     if ((ballPos.posY + ballPos.height < racketH.racketLeftY || ballPos.posY > (racketH.racketLeftY + height)) && ballPos.posX <= area.getBoundingClientRect().left) {
-//         ballPos.speedX = 0;
-//         ballPos.speedY = 0;
-//         ballPos.posX = area.getBoundingClientRect().left + 1;
-//     } else if (!(ballPos.posY + ballPos.height < racketH.racketLeftY || ballPos.posY > (racketH.racketLeftY + height)) && ballPos.posX < (racketH.racketLeftX + width)) {
-//         ballPos.speedX = -ballPos.speedX;
-//         ballPos.posX = area.getBoundingClientRect().left + width;
-//     }
+    scoreBoardInnerHTML(); // Обновляем счёт
+}
 
-//     // Проверка на столкновение с правой границей (пропущенный гол)
-//     if ((ballPos.posY + ballPos.height < racketH.racketRightY || ballPos.posY > (racketH.racketRightY + height)) && ballPos.posX + ballPos.width >= area.getBoundingClientRect().left + area.getBoundingClientRect().width) {
-//         ballPos.speedX = 0;
-//         ballPos.speedY = 0;
-//         ballPos.posX = area.getBoundingClientRect().left + area.getBoundingClientRect().width - ballPos.width - 1;
-//     } else if (!(ballPos.posY + ballPos.height < racketH.racketRightY || ballPos.posY > (racketH.racketRightY + height)) && ballPos.posX + ballPos.width > racketH.racketRightX) {
-//         ballPos.speedX = -ballPos.speedX;
-//         ballPos.posX = area.getBoundingClientRect().left + area.getBoundingClientRect().width - width - ballPos.width;
-//     }
-
-//     // Проверка столкновения с полом
-//     if (ballPos.posY + ballPos.height > area.getBoundingClientRect().top + racketArea.height) {
-//         ballPos.speedY = -ballPos.speedY;
-//         ballPos.posY = area.getBoundingClientRect().top + racketArea.height - ballPos.height;
-//     }
-
-//     // Проверка столкновения с потолком
-//     if (ballPos.posY < area.getBoundingClientRect().top) {
-//         ballPos.speedY = -ballPos.speedY;
-//         ballPos.posY = area.getBoundingClientRect().top;
-//     }
-// }
 
 
 
 // Функция для запуска игры
 function start(){
-    ballPos.speedX = 4;//4
+    ballStopped = false; // Сбрасываем флаг при старте
+
+    // возвращаем мяч в центр
+    ballPos.posX = (widthAr - ballPos.width) / 2; 
+    ballPos.posY = (heightAr - ballPos.height) / 2;
+    ballPos.speedX = 4;
 	ballPos.speedY = 2;
 
-    moveBall(); // Запускаем движение мяча
+    let angle;
+    do {
+        angle = Math.random() * (Math.PI * 2); 
+    } while (Math.abs(Math.cos(angle)) < 0.4); // исключаем слишком вертикальные направления
+
+    let speed = 4; 
+    ballPos.speedX = Math.cos(angle) * speed;
+    ballPos.speedY = Math.sin(angle) * speed;
+
+    // возвращаем ракетки в начальные позиции
+    racketH.racketLeftY = (heightAr - racketHeight) / 2;
+    racketH.racketRightY = (heightAr - racketHeight) / 2;
+    racketH.racketStartPos(); // применяем новые позиции
+
+    moveBall(); // запускаем движение мяча
 }

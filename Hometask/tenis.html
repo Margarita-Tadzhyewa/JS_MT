@@ -6,39 +6,58 @@
     <title>Tennis</title>
 </head>
 <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
     #area{
-        background: yellow;
+        position: relative;
+        background: rgb(223, 223, 126);
     }
 
     #rRacket{
         position: absolute;
-        background: green;
+        background: rgb(34, 196, 107);
         width: 20px;
         height: 90px;
     }
 
     #lRacket{
         position: absolute;
-        background: blue;
+        background: rgb(100, 100, 209);
         width: 20px;
         height: 90px;
     }
 
     #ball{
         position: absolute;
-        background: red;
+        background: rgb(197, 83, 83);
         width: 50px;
         height: 50px;
         border-radius: 50%;
     }
 
+    #scoreBoard {
+        margin-left: 185px;
+        width: 150px;
+        font-size: 40px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    input{
+        width: 130px;
+        height: 55px;
+        font-size: 40px;
+        margin-bottom: 8px;
+    }
+
 </style>
 <body>
-    <input type="button" id="butStart" value="Start">
-    <div id="score">
-        <div id="leftScore">0</div><span>:</span>
-        <div id="rightScore">0</div>
-    </div>
+    <input type="button" id="butStart" value="старт!">
+    <div id="scoreBoard"></div>
     <div id="area">
         <div id="lRacket"></div>
 
@@ -50,6 +69,7 @@
 
 
     <script type="text/javascript" src="TENNIS_DOM.js"></script>
+
     
 </body>
 </html>
