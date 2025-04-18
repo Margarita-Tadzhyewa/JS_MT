@@ -28,10 +28,9 @@
 <body>
     <script>
 
-        function ObjStorageFunc(){
+        function ObjStorageFunc(storageKey){
 
             let self = this;
-            const storageKey = "drinkStorage";
             let storage = JSON.parse(localStorage.getItem(storageKey)) || {};
 
             self.addValue = function (key, value) {
@@ -58,8 +57,8 @@
 
         };
 
-        const drinkStorage = new ObjStorageFunc();
-        const dishStorage = new ObjStorageFunc();
+        const drinkStorage = new ObjStorageFunc('drinkStorage');
+        const dishStorage = new ObjStorageFunc('dishStorage');
     </script>
 
     <h1>Напитки</h1>
