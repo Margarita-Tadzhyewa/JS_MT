@@ -1,19 +1,21 @@
 // класс для мигающих звёзд с рандомными параметрами
 class Star {
-  constructor(width, height) {
+  constructor(width, height, baseScale) {
     this.x = Math.random() * width; // координаты звёзд на canvas
     this.y = Math.random() * height;
-    this.radius = Math.random() * 1.5 + 0.5;
-    this.baseAlpha = Math.random() * 0.5 + 0.3; //базовая прозрачность
+    
+    // Уменьшаем радиус на мобильных устройствах
+    this.radius = Math.random() * (1.5 / baseScale) + 0.5; // базовый радиус
+    this.baseAlpha = Math.random() * 0.5 + 0.3; // базовая прозрачность
     this.alpha = this.baseAlpha; // текущая прозрачность(будет изменяться для мигания)
-    this.twinkleSpeed = Math.random() * 0.02 + 0.005; //скорость мерцания(скорость изменения прозрачности)
-    this.twinkleDirection = Math.random() < 0.5 ? -1 : 1; //направление мерцания(чтобы мигание не начиналось одинаково)
+    this.twinkleSpeed = Math.random() * 0.02 + 0.005; // скорость мерцания
+    this.twinkleDirection = Math.random() < 0.5 ? -1 : 1; // направление мерцания
 
     const starColors = ["#ffffff", "#ffe9c4", "#d4fbff", "#ffd1dc", "#c4dfff"];
     this.color = starColors[Math.floor(Math.random() * starColors.length)];
   }
 
-  // мерцание звёзд(изменение прозрачность alpha)
+  // мерцание звёзд(изменение прозрачности alpha)
   update() {
     this.alpha += this.twinkleSpeed * this.twinkleDirection;
     if (this.alpha >= 1) {
@@ -31,12 +33,12 @@ class Star {
     ctx.save();
     ctx.globalAlpha = this.alpha;
     ctx.fillStyle = this.color;
-    ctx.shadowBlur = 10; //размытие тени
+    ctx.shadowBlur = 10; // размытость тени
     ctx.shadowColor = this.color;
 
-    ctx.beginPath(); // Начинает новый путь для рисования фигуры
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); //рисуется круг
-    ctx.fill(); //заливаем круг цветом
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); // рисуем круг
+    ctx.fill();
 
     ctx.shadowBlur = 0;
     ctx.restore();
@@ -136,12 +138,13 @@ class Planet {
 
   //наведена ли мышка на планету. CenterX, CenterY - центр солнечной системы
   isHovered(mouseX, mouseY, centerX, centerY, scale) {
-    const size = this.size * scale; //визуальный радиус планеты с учетом масштаба
-    const { x, y } = this.getPosition(centerX, centerY, scale); //координаты планеты на холсте
-    const dx = mouseX - x; //расстояние от мыши до центра планеты
+    const size = this.size * scale; // Визуальный радиус планеты с учетом масштаба
+    const { x, y } = this.getPosition(centerX, centerY, scale); // Координаты планеты на холсте
+    const dx = mouseX - x; // Расстояние от мыши до центра планеты
     const dy = mouseY - y;
     return dx * dx + dy * dy <= size * size;
   }
+  
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -162,24 +165,44 @@ document.addEventListener("DOMContentLoaded", () => {
   let focusedPlanet = null;
 
   function resizeCanvas() {
-    canvas.width = window.innerWidth; //устанавливает ширину канваса равной ширине окна браузера
+    canvas.width = window.innerWidth; 
     canvas.height = window.innerHeight;
-    centerX = canvas.width / 2; //вычисляем центр экрана(это будет место Солнца)
+    centerX = canvas.width / 2; 
     centerY = canvas.height / 2;
-
-    
-    // baseScale = canvas.width / 1000; //масштаб сцены на основе ширины экрана
-
-    // Масштаб — функция от минимального размера экрана, чтобы планеты влезали
+  
+    // Масштабируем звезды в зависимости от разрешения
     const minSize = Math.min(canvas.width, canvas.height);
-    baseScale = minSize / 1200;
-
-    //создаем звёздочкти
+    baseScale = minSize / 1200; // Масштаб сцены на основе экрана
+  
+    // создаем звезды
     stars = [];
-    for (let i = 0; i < 400; i++) {
-      stars.push(new Star(canvas.width, canvas.height));
+    for (let i = 0; i < 200; i++) {
+      stars.push(new Star(canvas.width, canvas.height, baseScale)); // передаем масштаб
     }
   }
+
+
+
+
+  // function resizeCanvas() {
+  //   canvas.width = window.innerWidth; //устанавливает ширину канваса равной ширине окна браузера
+  //   canvas.height = window.innerHeight;
+  //   centerX = canvas.width / 2; //вычисляем центр экрана(это будет место Солнца)
+  //   centerY = canvas.height / 2;
+
+
+  //   // baseScale = canvas.width / 1000; //масштаб сцены на основе ширины экрана
+
+  //   // Масштаб — функция от минимального размера экрана, чтобы планеты влезали
+  //   const minSize = Math.min(canvas.width, canvas.height);
+  //   baseScale = minSize / 1200;
+
+  //   //создаем звёздочкти
+  //   stars = [];
+  //   for (let i = 0; i < 200; i++) {
+  //     stars.push(new Star(canvas.width, canvas.height));
+  //   }
+  // }
 
   const planetData = [
     { name: "Sun", imageSrc: "img/sun.png", size: 15, distance: 0, speed: 0 },
@@ -291,65 +314,70 @@ document.addEventListener("DOMContentLoaded", () => {
   // }
 
   function draw() {
-    //очищаем холст
+    // очищаем холст
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    //рисуем чёрный фон
+  
+    // рисуем чёрный фон
     ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    //рисуем звезды
+  
+    // рисуем звезды (звезды не изменяют масштаб)
     for (const star of stars) {
       star.update();
-      star.draw(ctx);
+      star.draw(ctx);  // Звезды рисуются независимо от масштаба
     }
-
-    //центр с учётом смещения
+  
+    // центр с учётом смещения
     const cx = centerX + offsetX;
     const cy = centerY + offsetY;
-    scale = baseScale;
-
-    //обновляем и рисуем планеты
-    if (isAnimationRunning) {
-      for (const p of planets) {
-        p.update(timeMultiplier);
-      }
-    }
-
+    
+    // Рисуем планеты с учетом масштаба
+    const actualScale = baseScale; // Здесь применяем масштаб только к планетам и орбитам
+    
     for (const p of planets) {
-      p.draw(ctx, cx, cy, scale);
+      p.update(timeMultiplier);
+    }
+  
+    // рисуем планеты
+    for (const p of planets) {
+      p.draw(ctx, cx, cy, actualScale);
     }
   }
+  
 
   canvas.addEventListener("mousemove", (e) => {
     let hovered = false; // флаг: есть ли хотя бы одна планета, над которой сейчас находится курсор
     for (const p of planets) {
-      if (
-        p.isHovered(
-          e.offsetX,
-          e.offsetY,
-          centerX + offsetX,
-          centerY + offsetY,
-          scale
-        )
-      ) {
+      // Здесь учитываем смещение и масштаб
+      const scaleAdjusted = baseScale; // Применяем масштаб
+      const isMouseOverPlanet = p.isHovered(
+        e.offsetX,
+        e.offsetY,
+        centerX + offsetX,
+        centerY + offsetY,
+        scaleAdjusted
+      );
+  
+      if (isMouseOverPlanet) {
         p.hover = true;
         hovered = true;
-        tooltip.style.left = e.pageX + 10 + "px"; //тут позиционируем подсказку с названием планеты
+        tooltip.style.left = e.pageX + 10 + "px"; // Позиционируем подсказку с названием планеты
         tooltip.style.top = e.pageY + "px";
         tooltip.innerText = p.name;
         tooltip.style.display = "block";
         canvas.style.cursor = "pointer";
       } else {
-        p.hover = false; //если курсор не над планетой - снимаем флаг
+        p.hover = false; // Если курсор не над планетой - снимаем флаг
       }
     }
+  
     if (!hovered) {
-      //если ни одна планета не была под курсором — прячем подсказку и возвращаем обычный курсор
+      // Если ни одна планета не была под курсором, скрываем подсказку и восстанавливаем обычный курсор
       tooltip.style.display = "none";
       canvas.style.cursor = "default";
     }
   });
+  
 
   canvas.addEventListener("wheel", (e) => {
     e.preventDefault();
@@ -419,13 +447,12 @@ document.addEventListener("DOMContentLoaded", () => {
           e.offsetY,
           centerX + offsetX,
           centerY + offsetY,
-          scale
+          baseScale
+
         )
       ) {
-        focusedPlanet = p;
-
-        focusedPlanet = p;
-
+        focusedPlanet = p;  // Устанавливаем планету как активную
+  
         // Виброотклик
         if ("vibrate" in navigator) {
           switch (p.name) {
@@ -439,20 +466,16 @@ document.addEventListener("DOMContentLoaded", () => {
               navigator.vibrate(50);
           }
         }
-
+  
         playClickSound(); // Щелчок при клике
-
-        // Виброотклик при касании
-        // if (window.navigator.vibrate) {
-        //   navigator.vibrate(50);
-        // }
-
+  
+        // Обновляем информацию о планете в infoBox
         infoBox.innerHTML = `
-            <button id="close-info">&times;</button>
-            <h2>${p.name}</h2>
-            <p><strong>Скорость вращения:</strong> ${p.speed.toFixed(3)}</p>
-            <p><strong>Орбита:</strong> ${p.distance} млн. км</p>
-            <p><strong>Размер:</strong> ${p.size} (отн. масштаба)</p>
+          <button id="close-info">&times;</button>
+          <h2>${p.name}</h2>
+          <p><strong>Скорость вращения:</strong> ${p.speed.toFixed(3)}</p>
+          <p><strong>Орбита:</strong> ${p.distance} млн. км</p>
+          <p><strong>Размер:</strong> ${p.size} (отн. масштаба)</p>
         `;
         infoBox.classList.remove("hidden");
         infoBox.classList.add("visible");
@@ -460,25 +483,41 @@ document.addEventListener("DOMContentLoaded", () => {
         clicked = true;
       }
     }
+  
     if (!clicked) {
-      hideInfoBox();
+      hideInfoBox(); // Если клик не по планете, скрываем информацию
     }
   });
-
+  
+  function hideInfoBox() {
+    infoBox.classList.remove("visible");
+    setTimeout(() => {
+      infoBox.classList.add("hidden");
+    }, 400); // Подождем завершения анимации исчезновения
+  }
+  
   function attachCloseHandler() {
     const btn = document.getElementById("close-info");
     if (btn) {
       btn.addEventListener("click", hideInfoBox);
     }
   }
-
-  //закрыть див с инфой
-  function hideInfoBox() {
-    infoBox.classList.remove("visible");
-    setTimeout(() => {
-      infoBox.classList.add("hidden");
-    }, 400); // подождём завершения transition
-  }
+  
+  
+  // function hideInfoBox() {
+  //   infoBox.classList.remove("visible");
+  //   setTimeout(() => {
+  //     infoBox.classList.add("hidden");
+  //   }, 400); // Подождем завершения анимации исчезновения
+  // }
+  
+  // function attachCloseHandler() {
+  //   const btn = document.getElementById("close-info");
+  //   if (btn) {
+  //     btn.addEventListener("click", hideInfoBox);
+  //   }
+  // }
+  
 
   // Звуки
   const clickSound = new Audio("click.mp3"); // файл щелчка
@@ -554,16 +593,19 @@ canvas.addEventListener("touchmove", (e) => {
 
     if (startDistance > 0) {
       const scaleFactor = newDistance / startDistance;
-      baseScale *= scaleFactor; // Обновляем масштаб
+      baseScale *= scaleFactor; // Обновляем масштаб только для объектов
       startDistance = newDistance; // Обновляем начальное расстояние для следующего шага
     }
   }
 });
+
 
 canvas.addEventListener("touchend", (e) => {
   if (e.touches.length === 0) {
     startDistance = 0; // сбрасываем расстояние после окончания касания
   }
 });
+
+
 
 });
