@@ -166,7 +166,9 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.height = window.innerHeight;
     centerX = canvas.width / 2; //вычисляем центр экрана(это будет место Солнца)
     centerY = canvas.height / 2;
-    baseScale = canvas.width / 1000; //масштаб сцены на основе ширины экрана
+
+    
+    // baseScale = canvas.width / 1000; //масштаб сцены на основе ширины экрана
 
     // Масштаб — функция от минимального размера экрана, чтобы планеты влезали
     const minSize = Math.min(canvas.width, canvas.height);
@@ -517,57 +519,51 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Обработка жестов для увеличения/уменьшения масштаба и перетаскивания
-  let startDistance = 0; // Начальное расстояние между пальцами
-  let startOffsetX = offsetX; // Начальное смещение по оси X
-  let startOffsetY = offsetY; // Начальное смещение по оси Y
+let startDistance = 0; // Начальное расстояние между пальцами
+let startOffsetX = offsetX; // Начальное смещение по оси X
+let startOffsetY = offsetY; // Начальное смещение по оси Y
 
-  canvas.addEventListener("touchstart", (e) => {
-    if (e.touches.length === 1) {
-      // Запись начальных координат при касании
-      startOffsetX = offsetX;
-      startOffsetY = offsetY;
-    } else if (e.touches.length === 2) {
-      // Расстояние между пальцами при увеличении/уменьшении масштаба
-      startDistance = Math.hypot(
-        e.touches[0].pageX - e.touches[1].pageX,
-        e.touches[0].pageY - e.touches[1].pageY
-      );
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    // Запись начальных координат при касании
+    startOffsetX = offsetX;
+    startOffsetY = offsetY;
+  } else if (e.touches.length === 2) {
+    // Расстояние между пальцами при увеличении/уменьшении масштаба
+    startDistance = Math.hypot(
+      e.touches[0].pageX - e.touches[1].pageX,
+      e.touches[0].pageY - e.touches[1].pageY
+    );
+  }
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 1) {
+    // Перетаскивание экрана
+    const dx = e.touches[0].pageX - canvas.width / 2;
+    const dy = e.touches[0].pageY - canvas.height / 2;
+
+    offsetX = startOffsetX + dx;
+    offsetY = startOffsetY + dy;
+  } else if (e.touches.length === 2) {
+    // Масштабирование с помощью жеста "щипок"
+    const newDistance = Math.hypot(
+      e.touches[0].pageX - e.touches[1].pageX,
+      e.touches[0].pageY - e.touches[1].pageY
+    );
+
+    if (startDistance > 0) {
+      const scaleFactor = newDistance / startDistance;
+      baseScale *= scaleFactor; // Обновляем масштаб
+      startDistance = newDistance; // Обновляем начальное расстояние для следующего шага
     }
-  });
+  }
+});
 
-  canvas.addEventListener("touchmove", (e) => {
-    if (e.touches.length === 1) {
-      // Перетаскивание экрана
-      const dx = e.touches[0].pageX - canvas.width / 2;
-      const dy = e.touches[0].pageY - canvas.height / 2;
+canvas.addEventListener("touchend", (e) => {
+  if (e.touches.length === 0) {
+    startDistance = 0; // сбрасываем расстояние после окончания касания
+  }
+});
 
-      offsetX = startOffsetX + dx;
-      offsetY = startOffsetY + dy;
-    } else if (e.touches.length === 2) {
-      // Масштабирование с помощью жеста "щипок"
-      const newDistance = Math.hypot(
-        e.touches[0].pageX - e.touches[1].pageX,
-        e.touches[0].pageY - e.touches[1].pageY
-      );
-
-      if (startDistance > 0) {
-        const scaleFactor = newDistance / startDistance;
-        baseScale *= scaleFactor; // Обновляем масштаб
-        startDistance = newDistance; // Обновляем начальное расстояние для следующего шага
-      }
-    }
-  });
-
-  canvas.addEventListener("touchend", (e) => {
-    if (e.touches.length === 0) {
-      startDistance = 0; // сбрасываем расстояние после окончания касания
-    }
-  });
-
-  // Виброотклик при касании
-  canvas.addEventListener("touchstart", (e) => {
-    if ("vibrate" in navigator) {
-      navigator.vibrate(50); // Легкая вибрация при касании
-    }
-  });
 });
