@@ -544,56 +544,100 @@ document.addEventListener("DOMContentLoaded", () => {
   // Обработка жестов для увеличения/уменьшения масштаба и перетаскивания
 // 
 
-let startDistance = 0; // Начальное расстояние между пальцами
-let startOffsetX = offsetX; // Начальное смещение по оси X
-let startOffsetY = offsetY; // Начальное смещение по оси Y
-let isDragging = false; // Флаг для отслеживания перетаскивания
+// let startDistance = 0; // Начальное расстояние между пальцами
+// let startOffsetX = offsetX; // Начальное смещение по оси X
+// let startOffsetY = offsetY; // Начальное смещение по оси Y
+// let isDragging = false; // Флаг для отслеживания перетаскивания
+
+// canvas.addEventListener("touchstart", (e) => {
+//   if (e.touches.length === 1) {
+//     // Если одно касание (начало перетаскивания)
+//     isDragging = true;
+//     startOffsetX = offsetX;
+//     startOffsetY = offsetY;
+//   } else if (e.touches.length === 2) {
+//     // Если два касания (начало зума)
+//     const dx = e.touches[1].clientX - e.touches[0].clientX;
+//     const dy = e.touches[1].clientY - e.touches[0].clientY;
+//     startDistance = Math.sqrt(dx * dx + dy * dy);
+//   }
+// });
+
+// canvas.addEventListener("touchmove", (e) => {
+//   if (e.touches.length === 1 && isDragging) {
+//     // Перетаскивание
+//     const deltaX = e.touches[0].clientX - canvas.offsetLeft;
+//     const deltaY = e.touches[0].clientY - canvas.offsetTop;
+//     offsetX = startOffsetX + deltaX;
+//     offsetY = startOffsetY + deltaY;
+//   } else if (e.touches.length === 2) {
+//     // Масштабирование
+//     const dx = e.touches[1].clientX - e.touches[0].clientX;
+//     const dy = e.touches[1].clientY - e.touches[0].clientY;
+//     const newDistance = Math.sqrt(dx * dx + dy * dy);
+    
+//     if (startDistance !== 0) {
+//       const scaleRatio = newDistance / startDistance;
+//       baseScale *= scaleRatio; // Изменяем масштаб
+//     }
+//     startDistance = newDistance; // Обновляем начальное расстояние для следующего движения
+//   }
+// });
+
+// canvas.addEventListener("touchend", (e) => {
+//   if (e.touches.length < 2) {
+//     startDistance = 0; // сбросить расстояние после отпускания пальцев
+//   }
+
+//   if (e.touches.length === 0) {
+//     // Если все касания закончены, завершить перетаскивание
+//     isDragging = false;
+//   }
+// });
+
+let isTouchDragging = false;
+let touchStartX = 0;
+let touchStartY = 0;
+let initialOffsetX = 0;
+let initialOffsetY = 0;
 
 canvas.addEventListener("touchstart", (e) => {
   if (e.touches.length === 1) {
-    // Если одно касание (начало перетаскивания)
-    isDragging = true;
-    startOffsetX = offsetX;
-    startOffsetY = offsetY;
-  } else if (e.touches.length === 2) {
-    // Если два касания (начало зума)
-    const dx = e.touches[1].clientX - e.touches[0].clientX;
-    const dy = e.touches[1].clientY - e.touches[0].clientY;
-    startDistance = Math.sqrt(dx * dx + dy * dy);
+    const touch = e.touches[0];
+    isTouchDragging = true;
+
+    // сохраняем начальную позицию касания и текущие смещения
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    initialOffsetX = offsetX;
+    initialOffsetY = offsetY;
   }
 });
 
 canvas.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 1 && isDragging) {
-    // Перетаскивание
-    const deltaX = e.touches[0].clientX - canvas.offsetLeft;
-    const deltaY = e.touches[0].clientY - canvas.offsetTop;
-    offsetX = startOffsetX + deltaX;
-    offsetY = startOffsetY + deltaY;
-  } else if (e.touches.length === 2) {
-    // Масштабирование
-    const dx = e.touches[1].clientX - e.touches[0].clientX;
-    const dy = e.touches[1].clientY - e.touches[0].clientY;
-    const newDistance = Math.sqrt(dx * dx + dy * dy);
-    
-    if (startDistance !== 0) {
-      const scaleRatio = newDistance / startDistance;
-      baseScale *= scaleRatio; // Изменяем масштаб
-    }
-    startDistance = newDistance; // Обновляем начальное расстояние для следующего движения
+  if (isTouchDragging && e.touches.length === 1) {
+    const touch = e.touches[0];
+
+    // смещение пальца от начальной точки касания
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+
+    // задаем новое смещение канваса
+    offsetX = initialOffsetX + dx;
+    offsetY = initialOffsetY + dy;
+
+    e.preventDefault(); // предотвращаем скролл страницы
   }
 });
 
 canvas.addEventListener("touchend", (e) => {
-  if (e.touches.length < 2) {
-    startDistance = 0; // сбросить расстояние после отпускания пальцев
-  }
-
-  if (e.touches.length === 0) {
-    // Если все касания закончены, завершить перетаскивание
-    isDragging = false;
-  }
+  isTouchDragging = false;
 });
+
+canvas.addEventListener("touchcancel", () => {
+  isTouchDragging = false;
+});
+
 
 
 
