@@ -542,58 +542,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Обработка жестов для увеличения/уменьшения масштаба и перетаскивания
-// 
-
-// let startDistance = 0; // Начальное расстояние между пальцами
-// let startOffsetX = offsetX; // Начальное смещение по оси X
-// let startOffsetY = offsetY; // Начальное смещение по оси Y
-// let isDragging = false; // Флаг для отслеживания перетаскивания
-
-// canvas.addEventListener("touchstart", (e) => {
-//   if (e.touches.length === 1) {
-//     // Если одно касание (начало перетаскивания)
-//     isDragging = true;
-//     startOffsetX = offsetX;
-//     startOffsetY = offsetY;
-//   } else if (e.touches.length === 2) {
-//     // Если два касания (начало зума)
-//     const dx = e.touches[1].clientX - e.touches[0].clientX;
-//     const dy = e.touches[1].clientY - e.touches[0].clientY;
-//     startDistance = Math.sqrt(dx * dx + dy * dy);
-//   }
-// });
-
-// canvas.addEventListener("touchmove", (e) => {
-//   if (e.touches.length === 1 && isDragging) {
-//     // Перетаскивание
-//     const deltaX = e.touches[0].clientX - canvas.offsetLeft;
-//     const deltaY = e.touches[0].clientY - canvas.offsetTop;
-//     offsetX = startOffsetX + deltaX;
-//     offsetY = startOffsetY + deltaY;
-//   } else if (e.touches.length === 2) {
-//     // Масштабирование
-//     const dx = e.touches[1].clientX - e.touches[0].clientX;
-//     const dy = e.touches[1].clientY - e.touches[0].clientY;
-//     const newDistance = Math.sqrt(dx * dx + dy * dy);
-    
-//     if (startDistance !== 0) {
-//       const scaleRatio = newDistance / startDistance;
-//       baseScale *= scaleRatio; // Изменяем масштаб
-//     }
-//     startDistance = newDistance; // Обновляем начальное расстояние для следующего движения
-//   }
-// });
-
-// canvas.addEventListener("touchend", (e) => {
-//   if (e.touches.length < 2) {
-//     startDistance = 0; // сбросить расстояние после отпускания пальцев
-//   }
-
-//   if (e.touches.length === 0) {
-//     // Если все касания закончены, завершить перетаскивание
-//     isDragging = false;
-//   }
-// });
 
 let isTouchDragging = false;
 let touchStartX = 0;
@@ -639,44 +587,35 @@ canvas.addEventListener("touchcancel", () => {
 });
 
 
-
-
-let isPinching = false;
-let initialPinchDistance = 0;
-let initialScale = scale;
-
-function getDistance(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.hypot(dx, dy);
-}
+let lastTouchDist = null;
 
 canvas.addEventListener("touchstart", (e) => {
   if (e.touches.length === 2) {
-    isPinching = true;
-    isTouchDragging = false; // отключаем перетаскивание
-    initialPinchDistance = getDistance(e.touches);
-    initialScale = scale;
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastTouchDist = Math.sqrt(dx * dx + dy * dy);
   }
 });
 
 canvas.addEventListener("touchmove", (e) => {
-  if (isPinching && e.touches.length === 2) {
-    const currentDistance = getDistance(e.touches);
-    const scaleChange = currentDistance / initialPinchDistance;
+  if (e.touches.length === 2 && lastTouchDist !== null) {
+    e.preventDefault(); // Отключаем скролл
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const currentDist = Math.sqrt(dx * dx + dy * dy);
+    const scaleChange = currentDist / lastTouchDist;
 
-    // масштабируем относительно центра между двумя пальцами
-    scale = Math.min(Math.max(initialScale * scaleChange, 0.1), 10);
-
-    e.preventDefault(); // блокируем прокрутку страницы
+    baseScale *= scaleChange;
+    lastTouchDist = currentDist;
   }
-});
+}, { passive: false });
 
 canvas.addEventListener("touchend", (e) => {
   if (e.touches.length < 2) {
-    isPinching = false;
+    lastTouchDist = null;
   }
 });
+
 
 
 
