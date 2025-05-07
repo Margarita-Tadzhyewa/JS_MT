@@ -641,5 +641,46 @@ canvas.addEventListener("touchcancel", () => {
 
 
 
+let isPinching = false;
+let initialPinchDistance = 0;
+let initialScale = scale;
+
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.hypot(dx, dy);
+}
+
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 2) {
+    isPinching = true;
+    isTouchDragging = false; // отключаем перетаскивание
+    initialPinchDistance = getDistance(e.touches);
+    initialScale = scale;
+  }
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  if (isPinching && e.touches.length === 2) {
+    const currentDistance = getDistance(e.touches);
+    const scaleChange = currentDistance / initialPinchDistance;
+
+    // масштабируем относительно центра между двумя пальцами
+    scale = Math.min(Math.max(initialScale * scaleChange, 0.1), 10);
+
+    e.preventDefault(); // блокируем прокрутку страницы
+  }
+});
+
+canvas.addEventListener("touchend", (e) => {
+  if (e.touches.length < 2) {
+    isPinching = false;
+  }
+});
+
+
+
+
+
 
 });
