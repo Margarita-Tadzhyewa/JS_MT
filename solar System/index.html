@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Солнечная система</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  
+  <div id="start-screen" class="space">
+    
+    <div>
+      <div class="stars"></div>
+      <div class="twinkling"></div>
+    </div>
+
+
+    <p class="name">Виртуальная Солнечная Система</p>
+    <button id="start-button" class="cosmic-button">
+       Запуск
+      <span class="glow"></span>
+      <span class="particles"></span>
+    </button>
+    <div class="flash"></div>
+  </div>
+
+  <canvas id="solar-canvas" style="width:100%; height:100%;"></canvas>
+<!-- <canvas id="minimap" style="width:200px; height:200px;"></canvas> -->
+
+
+  <div id="tooltip"></div>
+  <div id="planet-info" class="hidden">
+    <button id="close-info">&times;</button>
+  </div>
+
+  <div class="buttons">
+      <button type="submit" id="btn-start">Запустить движение</button>
+      <button type="submit" id="btn-stop">Остановить движение</button>
+  </div>
+  
+  <input type="range" id="time-slider" min="0.1" max="5" value="1" step="0.1" title="Скорость времени" />
+  
+  <script src="scr.js"></script>
+</body>
+</html>

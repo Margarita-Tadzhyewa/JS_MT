@@ -1,0 +1,22 @@
+
+ <script>
+    fetch('https://fe.it-academy.by/AjaxStringStorage2.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                f: 'READ',
+                n: 'TADZHYEWA_SOLARSYSTEM'
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                const planets = JSON.parse(data.result);
+                console.log('Загруженные планеты:', planets);
+
+                // Здесь можно использовать planets для отрисовки или логики
+            })
+            .catch(err => console.error('Ошибка при чтении:', err));
+
+ </script>
+</body>
+</html>
