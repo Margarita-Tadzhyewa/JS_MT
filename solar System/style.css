@@ -7,107 +7,124 @@
 img {
   width: 100%;
   height: 100%
+}
 
+html {
+  touch-action: none;
+}
+
+body {
+  touch-action: none;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(ellipse at center, #000015 0%, #000000 100%);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  /* убираем горизонтальный скролл */
+  /* overflow: hidden; */
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+}
+
+body {
+  cursor: url('./img/cursor.png'), auto !important;
 }
 
 
-  html{
-    touch-action: none;
+@keyframes trail {
+  0% {
+    opacity: 1;
   }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
 
-  body {
-    touch-action: none;
-    margin: 0;
-    padding: 0;
-    background: radial-gradient(ellipse at center, #000015 0%, #000000 100%);
-      height: 100%;
-      width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow-x: hidden; /* убираем горизонтальный скролл */
-    /* overflow: hidden; */
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-  }
-  
-  /* .space {
+
+/* .space {
     position: relative;
   } */
-  
-  #start-screen {
-      width: 100vw;
-      height: 100vh;
-      padding: 1rem;
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(#000 30%, #111);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    z-index: 16;
-    opacity: 1;
-    transition: opacity 1s ease;
-  }
 
-  #start-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
+#start-screen {
+  width: 100vw;
+  height: 100vh;
+  padding: 1rem;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(#000 30%, #111);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 16;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
 
-  .name{
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    /* min-width: 400px; */
-    color: white;
-    margin-bottom: 90px;
-    /* font-size: 45px; */
-    text-align: center;
-    z-index: 12;
+#start-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
-    font-size: clamp(20px, 4vw, 45px);
-    min-width: auto;
-    max-width: 100%;
-    padding: 0 1rem;
-    word-wrap: break-word;
-  }
+.name {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  /* min-width: 400px; */
+  color: white;
+  margin-bottom: 90px;
+  /* font-size: 45px; */
+  text-align: center;
+  z-index: 12;
 
-  .buttons{
-    display: flex;
-    min-height: 100vh;
-  }
+  font-size: clamp(20px, 4vw, 45px);
+  min-width: auto;
+  max-width: 100%;
+  padding: 0 1rem;
+  word-wrap: break-word;
+}
 
-  #btn-start, #btn-stop{
-    position: relative;
-    z-index: 15;
-    margin: auto 20px 50px 20px;
-    padding: 22px 22px;
-    height: 60px;
-    font-size: 18px;
-    background: linear-gradient(135deg, #4f46e5, #9333ea, #06b6d4);
-    border: none;
-    color: white;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 0 12px #6b21a8;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden;
-    font-family: "Press Start 2P", system-ui;
+.buttons {
+  display: flex;
+  min-height: 100vh;
+}
 
-    font-size: clamp(12px, 2vw, 18px);
-    padding: 1rem;
-    width: clamp(120px, 30vw, 200px);
-    text-align: center;
-  }
+#btn-start,
+#btn-stop {
+  position: relative;
+  z-index: 15;
+  margin: auto 20px 50px 20px;
+  padding: 22px 22px;
+  height: 60px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #4f46e5, #9333ea, #06b6d4);
+  border: none;
+  color: white;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 12px #6b21a8;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  font-family: "Press Start 2P", system-ui;
 
-  #btn-start:hover, #btn-stop:hover{
-    transform: scale(1.1);
-    box-shadow: 0 0 25px 5px #a855f7;
-  }
-  
-  /* #start-button {
+  font-size: clamp(12px, 2vw, 16px);
+  padding: 1rem;
+  width: clamp(120px, 30vw, 255px);
+  text-align: center;
+}
+
+#btn-start:hover,
+#btn-stop:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px 5px #a855f7;
+}
+
+/* #start-button {
     margin-top: 20px;
     padding: 12px 24px;
     font-size: 20px;
@@ -124,48 +141,53 @@ img {
     background-color: #ffea00;
     transform: scale(1.05);
   } */
-  
-  #solar-canvas{
-    position: absolute;
-    top: 0; left: 0;
-    /* display: none; */
-    transform: scale(0.5); /* Начальный размер */
-    transition: opacity 1s ease, transform 1s ease; /* Плавное изменение размера и прозрачности */
-    
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-  }
 
-  #solar-canvas.visible, #minimap.visible {
-    opacity: 1;
-    transform: scale(1); /* Завершающий размер */
-  }
-  
-  #minimap {
-    width: 200px;
-    height: 200px;
-    bottom: 10px;
-    right: 10px;
-    border: 1px solid white;
-    background: rgba(255, 255, 255, 0.05);
-    z-index: 2;
-  }
-  
-  #tooltip {
-    position: absolute;
-    padding: 5px 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 5px;
-    pointer-events: none;
-    display: none;
-    z-index: 3;
-  }
-  
-  /* #planet-info {
+#solar-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* display: none; */
+  transform: scale(0.5);
+  /* Начальный размер */
+  transition: opacity 1s ease, transform 1s ease;
+  /* Плавное изменение размера и прозрачности */
+
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+#solar-canvas.visible,
+#minimap.visible {
+  opacity: 1;
+  transform: scale(1);
+  /* Завершающий размер */
+}
+
+#minimap {
+  width: 200px;
+  height: 200px;
+  bottom: 10px;
+  right: 10px;
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 2;
+}
+
+#tooltip {
+  position: absolute;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 5px;
+  pointer-events: none;
+  display: none;
+  z-index: 3;
+}
+
+/* #planet-info {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -175,71 +197,72 @@ img {
     max-width: 300px;
     z-index: 3;
   } */
-  
-  #planet-info.hidden {
-    display: none;
-  }
-  
-  #time-slider {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    width: 80vw;
-    max-width: 500px;
-  }
 
-  #planet-info {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    /* width: 250px; */
-    padding: 1rem;
-    background: rgba(20, 20, 20, 0.9);
-    border-radius: 12px;
-    /* box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); */
-    box-shadow: 0 0 12px #6b21a8;
-    border: 1px solid #4f46e5;
-    opacity: 0;
-    transform: translateX(100%);
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    z-index: 5;
+#planet-info.hidden {
+  opacity: 0;
 
-    width: clamp(200px, 30vw, 300px);
-    max-width: 90vw;
-  }
-  
-  #planet-info.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  
-  #planet-info h2 {
-    margin-top: 0;
-    font-size: 1.4rem;
-    color: #4f46e5;
-  }
-  
-  #planet-info p {
-    color: #ffffff;
-    margin: 0.5rem 0;
-    font-size: 0.9rem;
-  }
-  
-  #close-info {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: #4f46e5;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
+}
+
+#time-slider {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 80vw;
+  max-width: 500px;
+}
+
+#planet-info {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  /* width: 250px; */
+  padding: 1rem;
+  background: rgba(20, 20, 20, 0.9);
+  border-radius: 12px;
+  /* box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); */
+  box-shadow: 0 0 12px #6b21a8;
+  border: 1px solid #4f46e5;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 5;
+
+  width: clamp(200px, 30vw, 300px);
+  max-width: 90vw;
+}
+
+#planet-info.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+#planet-info h2 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  color: #4f46e5;
+}
+
+#planet-info p {
+  color: #ffffff;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+#close-info {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #4f46e5;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
 
 
-  /* ----------- Космическая кнопка: анимация, свечение, вспышка ----------- */
+/* ----------- Космическая кнопка: анимация, свечение, вспышка ----------- */
 
 .cosmic-button {
   font-family: "Press Start 2P", system-ui;
@@ -305,36 +328,118 @@ img {
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
-.stars, .twinkling {
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  width:100%;
-  height:100%;
-  display:block;
+.stars,
+.twinkling {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .stars {
-  background:#000 url(https://i.postimg.cc/hhFD7Nkf/apps-47636-13819498107583324-fb06b53a-4974-4acb-85e6-f6f363f85ab6-edec48d0-ec35-4a1f-8bf5-c455987b4a.png) repeat top center;
+  background: #000 url(https://i.postimg.cc/hhFD7Nkf/apps-47636-13819498107583324-fb06b53a-4974-4acb-85e6-f6f363f85ab6-edec48d0-ec35-4a1f-8bf5-c455987b4a.png) repeat top center;
   z-index: 0;
 }
 
-/* .twinkling {
+.twinkling {
   background-image: url(https://i.postimg.cc/CLpNr4PF/twinkling.png);
   animation: 10s twinkle infinite;
   animation-timing-function: linear;
-} */
+} 
 
 @keyframes twinkle {
-  from {background-position: 0}
-  to {background-position: -100px 0}
+  from {
+    background-position: 0
+  }
+
+  to {
+    background-position: -100px 0
+  }
 }
 
-  
-  
+@media all and (max-width: 660px) {
+  #btn-start, #btn-stop {
+    font-size: clamp(9px, 2vw, 18px);
+    margin: auto 5px 50px 5px;
+    padding: 10px;
+    height: 45px;
+}
+}
+
+
+#time-slider {
+  -webkit-appearance: none; /* убираем стандартный стиль Chrome/Safari */
+  max-width: 450px;
+  height: 5px;
+  background: #ffffff;
+  border-radius: 5px;
+  outline: none;
+  margin: 10px 0;
+  transition: background 0.3s;
+}
+
+#time-slider:hover {
+  background: #ffffff;
+}
+
+/* Слайдер-трек (линия) для Chrome */
+#time-slider::-webkit-slider-runnable-track {
+  height: 8px;
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+/* Ползунок для Chrome */
+#time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #4f46e5;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -4px; /* выравниваем с треком */
+  transition: background 0.3s;
+}
+
+#time-slider::-webkit-slider-thumb:hover {
+  background: #4f46e5;
+}
+
+/* Firefox */
+#time-slider::-moz-range-track {
+  height: 8px;
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+#time-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #4f46e5;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Изменяем фон трека, чтобы он заполнялся */
+#time-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, #ff9800 0%, #ff9800 0%, #ddd 0%, #ddd 100%);
+}
+
+#time-slider::-moz-range-track {
+  background: linear-gradient(to right, #ff9800 0%, #ff9800 0%, #ddd 0%, #ddd 100%);
+}
