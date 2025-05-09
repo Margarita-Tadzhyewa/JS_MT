@@ -211,45 +211,6 @@ function collectImages(planet) {
   return promises;
 }
 
-// function loadPlanetsFromServer() {
-//   const ajaxHandlerScript = "https://fe.it-academy.by/AjaxStringStorage2.php";
-//   const stringName = "TADZHYEWA_SOLARSYSTEM";
-
-//   fetch(ajaxHandlerScript, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/x-www-form-urlencoded",
-//     },
-//     body: new URLSearchParams({
-//       f: "READ",
-//       n: stringName
-//     })
-//   })
-//     .then(response => {
-//       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-//       return response.json();
-//     })
-//     .then(data => {
-//       console.log("Server response:", data);
-//       if (data.error) throw new Error(data.error);
-//       if (!data.result) throw new Error("No data received");
-
-//       const parsedData = typeof data.result === "string"
-//         ? JSON.parse(data.result)
-//         : data.result;
-
-//       planets = parsedData.map(p => new Planet(p));
-//       resizeCanvas();
-//       animate();
-//     })
-//     .catch(err => {
-//       console.error("Error:", err);
-//       // fallback: можно использовать локальные данные
-//       planets = []; // или planets = planetData.map(...), если planetData оставить
-//       resizeCanvas();
-//       animate();
-//     });
-// }
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("solar-canvas");
@@ -459,20 +420,6 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
   }
 
-  // document.getElementById("start-button").addEventListener("click", () => {
-  //   const startScreen = document.getElementById("start-screen");
-  //   startScreen.classList.add("hidden");
-
-  //   setTimeout(() => {
-  //     canvas.classList.add("visible");
-  //     canvas.style.display = "block";
-
-  //     loadPlanetsFromServer();
-  //     // initPlanets();
-  //     resizeCanvas();
-  //     animate();
-  //   }, 1000); // время должно совпадать с transition в CSS
-  // });
 
   window.addEventListener("resize", resizeCanvas);
 
