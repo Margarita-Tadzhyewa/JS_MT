@@ -459,20 +459,20 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
   }
 
-  document.getElementById("start-button").addEventListener("click", () => {
-    const startScreen = document.getElementById("start-screen");
-    startScreen.classList.add("hidden");
+  // document.getElementById("start-button").addEventListener("click", () => {
+  //   const startScreen = document.getElementById("start-screen");
+  //   startScreen.classList.add("hidden");
 
-    setTimeout(() => {
-      canvas.classList.add("visible");
-      canvas.style.display = "block";
+  //   setTimeout(() => {
+  //     canvas.classList.add("visible");
+  //     canvas.style.display = "block";
 
-      loadPlanetsFromServer();
-      // initPlanets();
-      resizeCanvas();
-      animate();
-    }, 1000); // время должно совпадать с transition в CSS
-  });
+  //     loadPlanetsFromServer();
+  //     // initPlanets();
+  //     resizeCanvas();
+  //     animate();
+  //   }, 1000); // время должно совпадать с transition в CSS
+  // });
 
   window.addEventListener("resize", resizeCanvas);
 
@@ -490,7 +490,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //див с информацией о планете
   canvas.addEventListener("click", (e) => {
-    let clicked = false;
     for (const p of planets) {
       if (
         p.isHovered(
@@ -538,6 +537,74 @@ document.addEventListener("DOMContentLoaded", () => {
       hideInfoBox(); // если клик не по планете, скрываем информацию
     }
   });
+
+
+
+
+
+
+
+  canvas.addEventListener("touchend", (e) => {
+    if (e.changedTouches.length === 1) {
+      const touch = e.changedTouches[0];
+      const rect = canvas.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+  
+      let clicked = false;
+      for (const p of planets) {
+        if (
+          p.isHovered(
+            x,
+            y,
+            centerX + offsetX,
+            centerY + offsetY,
+            baseScale
+          )
+        ) {
+          focusedPlanet = p;
+  
+          if ("vibrate" in navigator) {
+            switch (p.name) {
+              case "Sun":
+                navigator.vibrate(100);
+                break;
+              case "Earth":
+                navigator.vibrate([50, 100, 50]);
+                break;
+              default:
+                navigator.vibrate(50);
+            }
+          }
+  
+          playClickSound();
+  
+          infoBox.innerHTML = `
+            <button id="close-info">&times;</button>
+            <h2>${p.name}</h2>
+            <p><strong>Скорость вращения:</strong> ${p.speed.toFixed(3)} км/с</p>
+            <p><strong>Орбита:</strong> ${p.distance} млн. км</p>
+            <p><strong>Размер:</strong> ${p.size} (отн. масштаба)</p>
+          `;
+          infoBox.classList.remove("hidden");
+          infoBox.classList.add("visible");
+          attachCloseHandler();
+          clicked = true;
+        }
+      }
+  
+      if (!clicked) {
+        hideInfoBox();
+      }
+    }
+  });
+  
+
+
+
+
+
+
 
   function hideInfoBox() {
     infoBox.classList.remove("visible");
@@ -628,10 +695,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  canvas.addEventListener("touchend", (e) => {
-    isTouchDragging = false;
-  });
-
   canvas.addEventListener("touchcancel", () => {
     isTouchDragging = false;
   });
@@ -664,6 +727,8 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   canvas.addEventListener("touchend", (e) => {
+    isTouchDragging = false;
+
     if (e.touches.length < 2) {
       lastTouchDist = null;
     }

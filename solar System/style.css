@@ -100,7 +100,7 @@ body {
 #btn-stop {
   position: relative;
   z-index: 15;
-  margin: auto 20px 50px 20px;
+  margin: auto 20px 80px 20px;
   padding: 22px 22px;
   height: 60px;
   font-size: 16px;
@@ -125,24 +125,6 @@ body {
   transform: scale(1.1);
   box-shadow: 0 0 25px 5px #a855f7;
 }
-
-/* #start-button {
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 20px;
-    border: none;
-    background-color: #ffd700;
-    color: #000;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #ffd70080;
-    transition: transform 0.3s ease, background 0.3s ease;
-  }
-
-  #start-button:hover {
-    background-color: #ffea00;
-    transform: scale(1.05);
-  } */
 
 #solar-canvas {
   position: absolute;
@@ -201,7 +183,7 @@ body {
   } */
 
 #planet-info.hidden {
-  opacity: 0;
+  display: none;
 
 }
 
@@ -376,7 +358,7 @@ body {
 @media all and (max-width: 660px) {
   #btn-start, #btn-stop {
     font-size: clamp(9px, 2vw, 18px);
-    margin: auto 5px 50px 5px;
+    margin: auto 5px 80px 5px;
     padding: 10px;
     height: 45px;
 }
@@ -390,7 +372,7 @@ body {
   background: #ffffff;
   border-radius: 5px;
   outline: none;
-  margin: 10px 0;
+  margin: 10px 0 38px 0;
   transition: background 0.3s;
 }
 
@@ -435,13 +417,4 @@ body {
   border-radius: 50%;
   cursor: pointer;
   border: none;
-}
-
-/* Изменяем фон трека, чтобы он заполнялся */
-#time-slider::-webkit-slider-runnable-track {
-  background: linear-gradient(to right, #ff9800 0%, #ff9800 0%, #ddd 0%, #ddd 100%);
-}
-
-#time-slider::-moz-range-track {
-  background: linear-gradient(to right, #ff9800 0%, #ff9800 0%, #ddd 0%, #ddd 100%);
 }
